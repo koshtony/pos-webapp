@@ -1,0 +1,39 @@
+{% extends "base.html" %} {% block pageContent %}
+<div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
+    <div class="mdc-card py-2">
+        <div class="d-flex justify-content-between align-items-center">
+            <h4 class="card-title mb-0">Add Category</h4>
+            <div class="text-start">
+                <a href="{{url_for('catInfo')}}"><button class="btn btn-primary bg-gradient btn-sm rounded-0" id="create_new"><i class="mdi mdi-plus"></i><span> BACK</span></button></a>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="background-color:aqua">
+    <form action="{{url_for('addCat')}}" method="POST" id="category-form" style="margin-left:250px; background-color:aqua">
+        <div class="form-group mb-3">
+            <label for="name" class="control-label">Category Name</label>
+            <input type="text" name="name" id="name" size="50" required>
+       
+        </div>
+        <div class="form-group mb-3">
+            <label for="description" class="control-label">Description</label>
+            <textarea rows="5" cols="50" name="description" id="description"  required></textarea>
+        </div>
+        <div class="form-group mb-3" style="margin-left:250px">
+            <label for="status" class="control-label">Status</label>
+            <select name="status" id="status" style="width:80" required>
+    
+            <option value="1">Active</option>
+            <option value="0">Inactive</option>
+            
+        </select>
+        </div>
+        <div class="form-group mb-3" style="margin-left:250px">
+            
+            <input type="submit" value="submit" size="50" required>
+       
+        </div>
+    </form>
+</div>
+{% endblock pageContent %}

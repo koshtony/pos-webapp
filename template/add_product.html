@@ -1,0 +1,117 @@
+{% extends "base.html" %} {% block pageContent %}
+<div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
+    <div class="mdc-card py-2">
+        <div class="d-flex justify-content-between align-items-center">
+            <h4 class="card-title mb-0">Add Products</h4>
+            <div class="text-start">
+                <button onclick="addDict();" class="btn btn-primary bg-gradient btn-sm rounded-0" id="add_dict"><i class="mdi mdi-plus"></i><span> </span>Add Dictionary</button>
+                <a href="{{url_for('addProd')}}"><button  id="create_new"><span> Reset</span></button></a>
+                <a href="{{url_for('prodInfo')}}"><button  id="create_new"><span> Products</span></button></a>
+            </div>
+            
+        </div>
+    </div>
+</div>
+<div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12" style="background-color:aqua">
+    <div class="mdc-card" style="background-color: aquamarine;">
+        <div class="table-responsive" id="products">
+            <table class="table table-striped table-bordered">
+        <form action="{{url_for('addProd')}}" method="POST" id="category-form"  enctype="multipart/form-data">
+            <div class="form-group mb-3" style="margin-left:200px;">
+                <label class="control-label">Serial No:</label>
+                <br>
+                <input type="text" name="serial" id="serial" size="30" required>
+           
+            </div>
+            <div class="form-group mb-3" style="margin-left:200px;">
+                <input list="magicHouses" id="pname" name="pname" placeholder="search here..." />
+          <datalist id="magicHouses">
+                {% for prodDict in prodDicts  %}
+                <option value="{{prodDict.dname}}">{{prodDict.dname}}</option>
+                {% endfor %}
+          </datalist>
+           
+            </div>
+            <div class="form-group mb-3" style="margin-left:200px;">
+                <label for="status" class="control-label">Product Category</label>
+                <br>
+                <select name="pcat" id="pcat" style="width:80" required>
+                {% for cat in cat %}
+                    <option value="{{cat.catName}}">{{cat.catName}}</option>
+                {% endfor %}
+                </select>
+           
+            </div>
+            <div class="form-group mb-3" style="margin-left:200px;">
+                <label class="control-label">Quantity</label>
+                <br>
+                <input type="text" name="pq" id="pq" size="30" required>
+           
+            </div>
+            <div class="form-group mb-3" style="margin-left:200px;">
+                <label class="control-label">Cost:</label>
+                <br>
+                <input type="text" name="pcost" id="pcost" size="30" required>
+           
+            </div>
+            <div class="form-group mb-3" style="margin-left:200px;">
+                <label for="name" class="control-label">Price:</label>
+                <br>
+                <input type="text" name="pp" id="pp" size="30" required>
+           
+            </div>
+            <div class="form-group mb-3" style="margin-left:200px;">
+                <label for="name" class="control-label">Warehouse/shop:</label>
+                <br>
+                <input type="text" name="shop" id="shop" size="30" required>
+           
+            </div>
+            <div class="form-group mb-3" style="margin-left:200px;">
+                <label class="control-label">Description</label>
+                <br>
+                <textarea rows="5" cols="30" name="pdesc" id="pdesc"  required></textarea>
+            </div>
+        
+            <div class="form-group mb-3" style="margin-left:250px">
+                <label for="status" class="control-label">Status</label>
+                <br>
+                <select name="status" id="status" style="width:80" required>
+        
+                <option value="1">Active</option>
+                <option value="0">Inactive</option>
+                
+            </select>
+            </div>
+            <div class="form-group mb-3" style="margin-left:250px">
+                <label class="control-label">Product Image:</label>
+                <br>
+                <input type="file" name="pi" id="pi" size="30" accept="image/png, image/jpg, image/jpeg" required>
+           
+            </div>
+            <div class="form-group mb-3" style="margin-left:250px">
+                
+                <input type="submit" value="submit" size="30" >
+           
+            </div>
+        </form>
+            </table>
+        </div>
+</div>
+</div>
+{% endblock pageContent %}
+{% block ScriptBlock %}
+<script>
+    function addDict(){
+    var formElem=document.getElementById("products")
+    formElem.innerHTML=`
+    <form action="{{url_for('addProd')}}" method="POST" style="margin-left:150">
+        <label>unique name for each item </label>
+        <br> <br>
+        <input type="text" id="dict" name="dict">
+        <br> <br>
+        <input type="submit" value="submit">
+    </form>
+`
+    }
+</script>
+{% endblock ScriptBlock %}

@@ -1,0 +1,169 @@
+{% extends "base.html" %} {% block pageContent %}
+<div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
+    <div class="mdc-card py-2">
+        <div class="d-flex justify-content-between align-items-center">
+            <h4 class="card-title mb-0">Point of Sales</h4>
+        </div>
+    </div>
+</div>
+<div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
+    <div class="mdc-card" style="background-color: aquamarine";>
+        <form method="POST" id="pos-form">
+            <fieldset>
+                <legend>Add Products</legend>
+                <div class="row align-items-end">
+                    <div class="col-lg-5 col-md-5 col-sm-12">
+                        <div class="form-group mb-3">
+                            <input list="magicHouses" id="serial" name="serial" placeholder="search here..." />
+                            <datalist id="magicHouses">
+                                  {% for scan in scans  %}
+                                  <option value="{{scan.name}}">{{scan.name}}</option>
+                                  {% endfor %}
+                            </datalist>
+                            <button style="border: none; background: aquamarine;" type="submit"><i class="fa fa-paper-plane"></i></button>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-5 col-md-12">
+                        <div class="form-group mb-3">
+                            <label for="product-qty">Qty</label>
+                            <input type="number" class="form-control form-control-sm text-center" step="any" name="qty" id="qty" value="1">
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-2 col-md-12">
+                        <div class="form-group mb-3">
+                            <a href="{{url_for('posPage')}}">
+                           <i class="fa fa-refresh"></i>
+                        </a>
+                        &nbsp &nbsp &nbsp
+                        <a href="/">
+                            <button style="background-color:aquamarine; border:None" type="button">
+                            <i class="fa fa-undo">  return item</i>
+                            </button>
+                         </a>
+                        </div>
+                        
+                            
+                        
+                        
+                    </div>
+                   
+
+                </div>
+            </fieldset>
+            <fieldset>
+                <div class="d-flex w-100" id="POS-field">
+                    <div class="col-8 bg-gradient bg-light border h-100">
+                        <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <colgroup>
+                                <col width="5%">
+                                <col width="15%">
+                                <col width="40%">
+                                <col width="20%">
+                                <col width="20%">
+                            </colgroup>
+                            <thead>
+                                <tr class="bg-dark bg-gradient bg-opacity-50 text-light">
+                                    <th class="py-1 px-2 text-center  text-light"></th>
+                                    <th class="py-1 px-2 text-center  text-light">QTY</th>
+                                    <th class="py-1 px-2 text-center  text-light">Product</th>
+                                    <th class="py-1 px-2 text-center  text-light">Price</th>
+                                    <th class="py-1 px-2 text-center  text-light">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbc">
+                            
+
+                            </tbody>
+                        </table>
+                        </div>
+                    </div>
+                    <div class="col-4 bg-gradient bg-dark bg-opacity-50 border h-100">
+                        <div class="col-12 py-4 px-2">
+                            <dl>
+                                <dt class="h4 fw-bold text-light">Sub Total</dt>
+                                <dd class="text-end py-1 px-2 rounded-0 bg-light">
+                                    <input type="hidden" name="sub_total" value="0">
+                                    <span class="h3 fw-bold" id="sub_total">0.00</span>
+                                </dd>
+                                <dt class="h4 fw-bold text-light">Tax Inclusive (%)</dt>
+                                <dd>
+                                    <input type="number" class="form-control form-control-lg rounded-0 text-end" step="any" min="0" max="100" name="tax" value="0">
+                                </dd>
+                                <dt class="h4 fw-bold text-light">Discount</dt>
+                                <dd class="text-end py-1 px-2 rounded-0 bg-light">
+                                    <input type="text" name="disc" id="disc" value="0">
+                                    <span class="h3 fw-bold" id="tax_amount">0.00</span>
+                                </dd>
+                                <dt class="h4 fw-bold text-light">Grand Total</dt>
+                                <dd class="text-end py-1 px-2 rounded-0 bg-light">
+                                    <input type="hidden" name="grand_total" value="0">
+                                    <input type="hidden" name="tendered_amount" value="0">
+                                    <input type="hidden" name="amount_change" value="0">
+                                    <input type="text" name="grand_total" id="grand_total" style="font-weight:bolder ;"value="0">
+                                    <span class="h3 fw-bold" id="grand_total"></span>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            <div class="row">
+                <div class="col-md-12 text-end">
+                    <button class="btn btn-primary btn-sm rounded-0" type="button" id="check_out"><i class="mdi mdi-save"></i> Checkout</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock pageContent %} {% block ScriptBlock %}
+
+<script>
+    $(document).ready(function(){
+    $('#pos-form').on('submit', function(e){
+        e.preventDefault();
+        var scans=JSON.parse('{{ scans | tojson | safe }}')
+        var newScans=[]
+        var err=[]
+        var ser=$('#serial').val()
+        var quant=$('#qty').val()
+        var disc=$('#disc').val()
+        //$('#serial').val("")
+        scans.forEach(function(scan){
+            if(scan.name==ser){
+            newScans.push(scan.pid,quant,scan.name,scan.price,scan.price*quant)
+            }
+            
+        })
+        if(newScans[1]==undefined){
+            newScans[0]="item not found"
+            newScans[1]="item not found"
+            newScans[2]="item not found"
+            newScans[3]=0
+        }
+        sum=parseFloat($('#grand_total').val());
+        sum+=newScans[4]
+        sum=sum-disc
+        $('#grand_total').val(sum)
+        $.ajax({
+        type:'POST',
+        url:'/pos',
+        data:{
+          serial:$("#serial").val(),
+          disc:$("#disc").val(),
+          qty:$('#qty').val()
+        },
+        success:function()
+        {
+            newLine='<tr><td>'+newScans[0]+'</td>'+'<td>'+newScans[1]+'</td>'+'<td>'+newScans[2]+'</td>'+'<td>'+newScans[3]+'</td>'+'<td>'+newScans[4]+'</td>'+'</tr>'
+            $('#tbc').append(newLine)
+        }
+      })
+    });
+});
+
+</script>
+{% endblock ScriptBlock %}
+
+

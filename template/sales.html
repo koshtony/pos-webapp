@@ -1,0 +1,96 @@
+{% extends "base.html" %}  {% block pageContent %}
+<div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
+    <div class="mdc-card py-2">
+        <div class="d-flex justify-content-between align-items-center">
+            <h4 class="card-title mb-0">Sales List</h4>
+            <input list="magicHouses" id="iname" name="iname" placeholder="search here..." />
+          <datalist id="magicHouses">
+                {% for sale in sales %}
+                <option value="{{sale.sname}}">{{sale.sname}}</option>
+                {% endfor %}
+          </datalist>
+
+        </div>
+        
+    </div>
+</div>
+<div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
+    <div class="mdc-card">
+        <div class="table-responsive">
+            <form action="{{url_for('salesInfo')}}" method="POST">
+                <label>from</label>
+                <input type="date" name="date1" id="date1">
+                <label>To:</label>
+                <input type="date" name="date2" id="date2">
+                <button style="border: none; background: white;" type="submit"><i class="fa fa-filter"></i></button>
+                &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+                <a href="{{url_for('salesInfo')}}">
+                    
+                    <i class="fa fa-refresh"></i>
+                   
+                 </a>
+            </form>
+            
+            <table class="table table-striped table-bordered">
+                <colgroup>
+                    <col width="5%">
+                    <col width="20%">
+                    <col width="20%">
+                    <col width="25%">
+                    <col width="15%">
+                    <col width="15%">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th class="text-center py-1">#</th>
+                        <th class="text-center py-1">DateTime</th>
+                        <th class="text-center py-1">Trans. Code</th>
+                        <th class="text-center py-1">name</th>
+                        <th class="text-center py-1">Price</th>
+                        <th class="text-center py-1">Profit</th>
+                        <th class="text-center py-1">Seller</th>
+                        <th class="text-center py-1">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="saletab">
+                    {% for sale in sales %}
+                    <tr>
+                        <td class="px-2 py-1 text-center">{{sale.sid}}</td>
+                        <td class="px-2 py-1 text-start">{{sale.sDate}}</td>
+                        <td class="px-2 py-1 text-start">{{sale.scode}}</td>
+                        <td class="px-2 py-1 text-start">{{sale.sname}}</td>
+                        <td id="price" class="px-2 py-1 text-end">{{sale.sPrice}}</td>
+                        <td id="profit" class="px-2 py-1 text-end">{{sale.sProfit}}</td>
+                        <td class="px-2 py-1 text-center">{{sale.sCreator}}</td>
+                        <td class="px-2 py-1 text-center">
+                            <button class="mdc-button mdc-button--raised p-1 icon-button filled-button--light mdc-ripple-upgraded view-data" type="button" data-id="" title="View Receipt">
+                                <i class="material-icons mdc-button__icon">receipt</i>
+                            </button>
+                            <a href="/sales/del/{{sale.sid}}">
+                            <button class="mdc-button mdc-button--raised p-1 icon-button filled-button--danger mdc-ripple-upgraded delete-data" type="button" data-id="" data-code="" title="Delete">
+                                <i class="material-icons mdc-button__icon">deleteoutline</i>
+                            </button>
+                            </a>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <label style="color:orange">Total price</label>
+            <input type="text" name="total_price" value="{{price}}">
+            <label style="color:brown">Total profit</label>
+            <input type="text" name="total_profit" value="{{profit}}">
+        </div>
+    </div>
+</div>
+{% endblock pageContent %} {% block ScriptBlock %}
+<script>
+    $(document).ready(function(){
+        $("#iname").on("keyup",function(){
+            var value=$(this).val().toLowerCase();
+            $("#saletab tr").filter(function(){
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
+{% endblock ScriptBlock %}

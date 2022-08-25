@@ -1,0 +1,86 @@
+{% extends "base.html" %} {% block pageContent %}
+<div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
+    <div class="mdc-card py-2">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="text-start">
+            <a href="{{url_for('summaryInfo')}}"><button class="btn btn-primary" id="create_exps"><span> Expenses Summary</span></button></a>
+            
+            <button onclick="expFunc()" class="btn btn-success"id="expBtn"><span> Add Expenses</span></button>
+            </div>
+        </div>
+        
+    </div>
+</div>
+<div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
+    <div class="mdc-card" style="background-color:aquamarine">
+        <form action="{{url_for('summaryInfo')}}" method="POST">
+            <label>from</label>
+            <input type="date" name="date1" id="date1">
+            <label>To:</label>
+            <input type="date" name="date2" id="date2">
+            <button style="border: none; background: aquamarine;" type="submit"><i class="fa fa-filter"></i></button>
+            &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+            <a href="{{url_for('summaryInfo')}}">
+                
+                <i class="fa fa-refresh"></i>
+               
+             </a>
+        </form>
+        <div class="table-responsive" id="expTab">
+            <table class="table table-bordered">
+            <thead>
+                <tr class="bg-dark bg-gradient bg-opacity-50 text-light">
+                    <th class="py-1 px-2 text-center  text-light">expenses</th>
+                    <th class="py-1 px-2 text-center  text-light">Date </th>
+                    <th class="py-1 px-2 text-center  text-light">Amount</th>
+                    <th class="py-1 px-2 text-center  text-light">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for exp in exps %}
+                 <tr>
+                    <td>{{exp.edesc}}</td>
+                    <td>{{exp.edate}}</td>
+                    <td>{{exp.amnt}}</td>
+                    <td>{{exp.amnt}}</td>
+                 </tr> 
+                 {% endfor %}     
+            </tbody>
+        </table>
+        <table style="margin-left:300px">
+            <thead>
+                <th style="background-color:red">  Total Expenses  </th>
+                <th style="background-color:blue">  Total sales Profit  </th>
+                <th style="background-color:green">  Net Profit  </th>
+            </thead>
+            <tr style="background-color:grey">
+                <td>{{expsum}}</td>
+                <td>{{profits}}</td>
+                <td>{{netf}}</td>
+            </tr>
+        </table>
+
+          
+        </div>
+    </div>
+</div>
+{% endblock pageContent %} {% block ScriptBlock %}
+<script>
+    function expFunc(){
+    var expForm=document.getElementById("expTab")
+    expForm.innerHTML=`
+    <form action='{{url_for('summaryInfo')}}' method="post" style="margin-left:250px">
+        <label>Amount</label>
+        <br><br>
+        <input type="text" name="amount" id="amount">
+        <br><br>
+        <label>Desc/purpose</label>
+        <br><br>
+        <input type="text" name="exp" id="exp">
+        <br><br>
+        <input type="submit" value="submit">
+    </form>
+    `
+}
+</script>
+{% endblock ScriptBlock %}

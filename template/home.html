@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block pageContent %}
+<div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
+    <div class="mdc-card">
+        <div class="d-flex justify-content-between">
+            <h4 class="card-title mb-0">Home Page</h4>
+        </div>
+    </div>
+</div>
+<div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
+    <hr class="w-100">
+</div>
+<div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-3-desktop mdc-layout-grid__cell--span-3-tablet">
+    <div class="mdc-card info-card info-card--success">
+        <div class="card-inner">
+            <h5 class="card-title">Categories</h5>
+            <h5 style="font-weight: bold; font-size: large; color:green" class="font-weight-light pb-2 mb-1 border-bottom">{{cat}}</h5>
+            <p class="tx-12 text-muted">Over All Count of Categories</p>
+            <div class="card-icon-wrapper">
+            <a href="{{url_for('catInfo')}}">
+                <i class="material-icons">list</i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-3-desktop mdc-layout-grid__cell--span-3-tablet">
+    <div class="mdc-card info-card info-card--primary">
+        <div class="card-inner">
+            <h5 class="card-title">Products</h5>
+            <h5 style="font-weight: bold; font-size: large; color:blue" class="font-weight-light pb-2 mb-1 border-bottom">{{prod}}</h5>
+            <p class="tx-12 text-muted">Over All Count of Products</p>
+            <div class="card-icon-wrapper">
+                <a href="{{url_for('prodInfo')}}">
+                <i class="material-icons">label</i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-3-desktop mdc-layout-grid__cell--span-3-tablet">
+    <div class="mdc-card info-card info-card--info">
+        <div class="card-inner">
+            <h5 class="card-title">Today's Transactions</h5>
+            <h5 style="font-weight: bold; font-size: large; color:aqua" class="font-weight-light pb-2 mb-1 border-bottom">{{trans}}</h5>
+            <p class="tx-12 text-muted">Over All Count of Today's Transactions</p>
+            <div class="card-icon-wrapper">
+                <a href="{{url_for('salesInfo')}}">
+                <i class="material-icons">receipt</i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-3-desktop mdc-layout-grid__cell--span-3-tablet">
+    <div class="mdc-card info-card info-card--warning">
+        <div class="card-inner">
+            <h5 class="card-title">Today's Sales</h5>
+            <h5 style="font-weight: bold; font-size: large; color:fuchsia" class="font-weight-light pb-2 mb-1 border-bottom">{{sales}}</h5>
+            <p class="tx-12 text-muted">Total Sales Today</p>
+            <div class="card-icon-wrapper">
+                <a href="{{url_for('salesInfo')}}">
+                <i class="mdi mdi-cash-multiple"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock pageContent %}
