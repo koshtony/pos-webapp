@@ -10,7 +10,7 @@ import socket
 import os
 import random
 app=Flask(__name__,template_folder='template')
-Talisman(app)
+#Talisman(app)
 key="@piontonsale"
 app.config["SECRET_KEY"]=key;
 app.config["SQLALCHEMY_DATABASE_URI"]='sqlite:///pos.db'
