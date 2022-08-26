@@ -54,12 +54,10 @@ def prodFilter():
     for prod in prods:
         tdyProd.append(datetime.strptime(prod[0].split(" ")[0],"%Y-%m-%d"))
     return len([i for i in tdyProd if str(i).split(" ")[0]==str(date.today()).split(" ")[0]])
-def remvSale(name,quant):
+def retProd(quant,name):
     conn=sqlite3.connect("./pambo/pos.db")
-    conn.execute('update sales set sPrice= ',(name,))
+    conn.execute('update products set pQuant=pQuant+? where pname=?',(quant,name,))
     conn.commit()
-def retProd(name):
-    pass
 
 
 

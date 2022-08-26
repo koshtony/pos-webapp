@@ -1,11 +1,11 @@
 from pambo import app,posData,logins
 from pambo.database import posUsers,products,sales,customer,expenses,category,dictionary
 from flask_login import current_user,UserMixin,login_user,logout_user,UserMixin,login_required,LoginManager
-from flask import render_template,request,redirect,url_for,send_from_directory,jsonify,flash;
+from flask import render_template,request,redirect,url_for,send_from_directory,jsonify,flash,send_file;
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from datetime import datetime,date
-from pambo.grpProd import getCat,getProdCat,scanOut,getProds,prodOut,prodChange,salesFilter,prodFilter
+from pambo.grpProd import getCat,getProdCat,scanOut,getProds,prodOut,prodChange,salesFilter,prodFilter,retProd
 from pambo.calc import profSum,expSum,countRes,numProd
 import random
 import os
@@ -36,7 +36,7 @@ def login():
         userid=request.form["userid"]
         password=request.form["password"]
         users=posUsers.query.filter_by(user=userid).first()
-        if users and check_password_hash(users.password,password):
+        if users and check_password_hash(users.password==password):
             login_user(users)
             return redirect(url_for('home'))
         else: 
@@ -109,7 +109,7 @@ def addProd():
                 pCat=pcat,pImage=imFile.filename,pQuant=pq,pCost=pcost,pPrice=pp,pStatus=status,
                 pDate=date.today(),pShop=shop,pCreator=""
             )
-            imFile.save(os.path.join("./pambo/images",secure_filename(imFile.filename)))
+            imFile.save(os.path.join("./pambo/images/",secure_filename(imFile.filename)))
             posData.session.add(prodInfo)
             posData.session.commit()
             return redirect(url_for('prodInfo'))
@@ -126,7 +126,7 @@ def addProd():
 @app.route('/imdownload/<path:filename>')
 @login_required
 def prodImg(filename):
-    return send_from_directory(app.config["UPLOAD_FOLDER"],filename)
+    return send_from_directory("images/",filename,as_attachment=True)
 @app.route('/pos',methods=['GET','POST'])
 @login_required
 def posPage():
@@ -234,8 +234,11 @@ def editProd(id):
         prodByid.pPrice=request.form["pp"]
         prodByid.pCost=request.form["pcost"]
         prodByid.pShop=request.form["shop"]
+        Imfile=request.files["pi"]
+        prodByid.pImage=Imfile.filename
         prodByid.pDate=date.today()
         posData.session.commit()
+        Imfile.save(os.path.join('./pambo/images/',secure_filename(Imfile.filename)))
         return redirect(url_for('prodInfo'))
     return render_template('proEdit.html',prodbyid=prodByid,prodDicts=prodDicts)
 @app.route('/sales/del/<int:id>')
@@ -248,7 +251,8 @@ def delSales(id):
 @app.route('/sales/return',methods=["GET","POST"])
 @login_required
 def retSales():
-    pass
+    if request.method=="POST":
+        pass
 @app.errorhandler(404)
 def error404(error):
     return render_template('404.html'),404
