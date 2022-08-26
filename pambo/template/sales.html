@@ -48,7 +48,9 @@
                         <th class="text-center py-1">name</th>
                         <th class="text-center py-1">Price</th>
                         <th class="text-center py-1">Profit</th>
-                        <th class="text-center py-1">Seller</th>
+                        <th class="text-center py-1">Discount</th>
+                        <th class="text-center py-1">Quantity</th>
+                        <th class="text-center py-1">Seller id</th>
                         <th class="text-center py-1">Action</th>
                     </tr>
                 </thead>
@@ -59,10 +61,12 @@
                         <td class="px-2 py-1 text-start">{{sale.sDate}}</td>
                         <td class="px-2 py-1 text-start">{{sale.scode}}</td>
                         <td class="px-2 py-1 text-start">{{sale.sname}}</td>
-                        <td id="price" class="px-2 py-1 text-end">{{sale.sPrice}}</td>
-                        <td id="profit" class="px-2 py-1 text-end">{{sale.sProfit}}</td>
-                        <td class="px-2 py-1 text-center">{{sale.sCreator}}</td>
-                        <td class="px-2 py-1 text-center">
+                        <td id="price" class="px-2 py-1 text-start">{{sale.sPrice}}</td>
+                        <td id="profit" class="px-2 py-1 text-start">{{sale.sProfit}}</td>
+                        <td id="profit" class="px-2 py-1 text-start">{{sale.sDisc}}</td>
+                        <td id="profit" class="px-2 py-1 text-start">{{sale.sQuant}}</td>
+                        <td class="px-2 py-1 text-start">{{sale.sCreator}}</td>
+                        <td class="px-2 py-1 text-start">
                             <button class="mdc-button mdc-button--raised p-1 icon-button filled-button--light mdc-ripple-upgraded view-data" type="button" data-id="" title="View Receipt">
                                 <i class="material-icons mdc-button__icon">receipt</i>
                             </button>

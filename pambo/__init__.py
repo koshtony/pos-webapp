@@ -8,7 +8,7 @@ from datetime import datetime,date
 import socket
 import os
 import random
-app=Flask(__name__,template_folder='template');
+app=Flask(__name__,template_folder='template',static_folder='./static');
 key="@piontonsale"
 app.config["SECRET_KEY"]=key;
 app.config["SQLALCHEMY_DATABASE_URI"]='sqlite:///pos.db'

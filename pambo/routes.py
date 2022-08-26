@@ -36,7 +36,7 @@ def login():
         userid=request.form["userid"]
         password=request.form["password"]
         users=posUsers.query.filter_by(user=userid).first()
-        if users and check_password_hash(users.password,password):
+        if users and users.password==password:
             login_user(users)
             return redirect(url_for('home'))
         else: 
@@ -140,7 +140,7 @@ def posPage():
             scanned=sales(
             serial=scans[0][0],scode=code,sname=scans[0][1],sImage=scans[0][2],
             sDate=date.today(),sCost=scans[0][3],sPrice=int(scans[0][4])*int(qty)-int(disc),
-            sProfit=int(scans[0][4])*int(qty)-int(disc)-int(scans[0][5])*int(qty),sCreator=current_user.user
+            sProfit=int(scans[0][4])*int(qty)-int(disc)-int(scans[0][5])*int(qty),sDisc=float(disc),sQuant=qty,sCreator=current_user.user
             )
             posData.session.add(scanned)
             posData.session.commit()
