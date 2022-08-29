@@ -29,7 +29,7 @@
     <script src="/static/posAPP/assets/bootstrap/js/popper.min.js"></script>
 </head>
 
-<body>
+<body >
     <script src="/static/posAPP/assets/material-admin/js/preloader.js"></script>
     <div class="body-wrapper" style="background-color: orange;">
         <div class="main-wrapper">
@@ -39,7 +39,7 @@
                         <div class="mdc-layout-grid__inner justify-content-center" >
                             <div class="mdc-layout-grid__cell--span-2-desktop"></div>
                         
-                                <h3 class="text-center"> Seller's Login</h3>
+                               
                             
                            
                             
@@ -49,8 +49,14 @@
                             <div class="stretch-card mdc-layout-grid__cell--span-4-desktop mdc-layout-grid__cell--span-1-tablet"></div>
                             <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-4-desktop mdc-layout-grid__cell--span-6-tablet">
                                 <div class="mdc-card">
-                                    <form action="{{url_for('login')}}" id="login-user" method="post">
-    
+                                    <form action="{{url_for('login')}}" id="login-user" method="post" >
+                                        <h3 class="text-center"> Seller's Login</h3>
+                                        <br>
+                                        {% with messages =get_flashed_messages() %}
+                                        {% for message in messages %}
+                                        <p style="color:red">{{message}}</p>
+                                        {% endfor %}
+                                        {% endwith %}
                                         <div class="mdc-layout-grid">
                                             <div class="mdc-layout-grid__inner">
                                                 <form action="{{url_for('login')}}" id="login" method="post">
@@ -88,11 +94,7 @@
             </div>
         </div>
     </div>
-    {% with messages =get_flashed_messages() %}
-                                                        {% for message in messages %}
-                                                        <p style="color:red; margin-left:550px">{{message}}</p>
-                                                        {% endfor %}
-                                                        {% endwith %}
+    
                         </div>
     <script>
         window.start_loader = function() {

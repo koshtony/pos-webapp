@@ -16,17 +16,26 @@ def load_user(id):
 @app.route('/admin',methods=["GET",'POST'])
 @login_required
 def admin():
-    if current_user.user!="400":
+    if current_user.user!="500":
         return render_template('403.html')
     else:
         if request.method=="POST":
             userid=request.form["userid"]
             password=request.form["password"]
-            password=generate_password_hash(password)
-            userInfo=posUsers(user=userid,password=password)
-            posData.session.add(userInfo)
-            posData.session.commit()
-            return redirect(url_for('home'))
+            confirm=request.form["confirm"]
+            if password==confirm:
+                if str(posUsers.query.filter_by(user=userid).first().user) =="":
+                    password=generate_password_hash(password)
+                    userInfo=posUsers(user=userid,password=password)
+                    posData.session.add(userInfo)
+                    posData.session.commit()
+                    return redirect(url_for('home'))
+                else:
+                    flash("user already exists")
+
+                
+            else:
+                flash("password does not match")
         return render_template('add_user.html')
 #----- login route
 @app.route('/',methods=["GET","POST"])
@@ -36,7 +45,7 @@ def login():
         userid=request.form["userid"]
         password=request.form["password"]
         users=posUsers.query.filter_by(user=userid).first()
-        if users and users.password==password:
+        if users and check_password_hash(users.password,password):
             login_user(users)
             return redirect(url_for('home'))
         else: 
