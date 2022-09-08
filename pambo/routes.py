@@ -5,7 +5,7 @@ from flask import render_template,request,redirect,url_for,send_from_directory,j
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from datetime import datetime,date
-from pambo.grpProd import getCat,getProdCat,scanOut,getProds,prodOut,prodChange,salesFilter,prodFilter,retProd
+from pambo.grpProd import getCat,getProdCat,scanOut,getProds,prodOut,prodChange,salesFilter,prodFilter,retProd,graphSales
 from pambo.calc import profSum,expSum,countRes,numProd
 import random
 import os
@@ -195,8 +195,9 @@ def summaryInfo():
         try:
             amount=request.form["amount"]
             exp=request.form["exp"]
+            dates=request.form["dd"]
             sumInfo=expenses(
-                amnt=amount,edesc=exp,edate=date.today()
+                amnt=amount,edesc=exp,edate=datetime.strptime(dates,"%Y-%m-%d")
             )
             posData.session.add(sumInfo)
             posData.session.commit()
@@ -262,6 +263,22 @@ def delSales(id):
 def retSales():
     if request.method=="POST":
         pass
+# graphical reports url
+@app.route('/reports')
+def graphs():
+    prodx=[]
+    products_ = products.query.all()
+    sales_=sales.query.all()
+    for prods in products_:
+        scan={
+        "quant":round(prods.pQuant),
+        "name":prods.pname,
+        "price":prods.pPrice
+         }
+        prodx.append(scan)
+    sale_=graphSales()
+
+    return render_template('charts.html',products=prodx,sales=sale_)
 @app.errorhandler(404)
 def error404(error):
     return render_template('404.html'),404

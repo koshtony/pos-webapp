@@ -1,1 +1,89 @@
+{% extends 'base.html' %}
+{% block pageContent %}
+<canvas id="myChart" style="width:80%;max-width:500px"></canvas>
+<canvas id="lChart" style="width:100%;max-width:500px; margin-left:0px;margin-top:250px;""></canvas>
+<canvas id="saleChart" style="width:100%;max-width:500px; margin-left:350px;"></canvas>
+{% endblock pageContent %}{% block ScriptBlock %}
+
+<script>
+colors=[
+	"red","green","yellow","brown",
+	"blue","aqua"
+]
+var prods=JSON.parse('{{ products | tojson | safe }}')
+var sales= JSON.parse('{{ sales | tojson | safe }}')
+var items = [];
+var qty=[]
+var price=[]
+saleItem=[]
+saleQty=[]
+saleDate=[]
+prods.forEach(function(prod){
+   items.push(prod.name)
+   qty.push(parseInt(prod.quant))
+}
+)
+sales.forEach(function(sale){
+  saleItem.push(sale.name)
+  saleQty.push(sale.quant)
+  saleDate.push(sale.date)
+}
+)
+
+var barColors = colors.slice(0,items.length)
+
+new Chart("myChart", {
+  type: "bar",
+  data: {
+    labels: items,
+    datasets: [{
+      backgroundColor: barColors,
+      data: qty
+    }]
+  },
+  options: {
+    legend: {display: false},
+    title: {
+      display: true,
+      text: "stock levels"
+    }
+  }
+});
+new Chart("lChart", {
+  type: "line",
+  data: {
+    labels: saleDate,
+    datasets: [{
+      data: saleQty,
+	  fill:false,
+	  borderColor:"orange"
+    }]
+  },
+  options: {
+    legend: {display: false},
+    title: {
+      display: true,
+      text: ""
+    }
+  }
+});
+new Chart("saleChart", {
+  type: "bar",
+  data: {
+    labels: saleItem,
+    datasets: [{
+      backgroundColor: barColors,
+      data: saleQty
+    }]
+  },
+  options: {
+    legend: {display: false},
+    title: {
+      display: true,
+      text: "total sales"
+    }
+  }
+});
+</script>
+{% endblock ScriptBlock %}
 
