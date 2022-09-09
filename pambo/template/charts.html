@@ -1,8 +1,15 @@
 {% extends 'base.html' %}
 {% block pageContent %}
-<canvas id="myChart" style="width:80%;max-width:500px"></canvas>
-<canvas id="lChart" style="width:100%;max-width:500px; margin-left:0px;margin-top:250px;""></canvas>
-<canvas id="saleChart" style="width:100%;max-width:500px; margin-left:350px;"></canvas>
+<div class="donut-raised">
+      <canvas id="myChart" style="width:100%;max-width:350px; margin-left:40px;"></canvas>
+</div>
+<div class="line-raised">
+      <canvas id="lChart"></canvas>
+</div>
+<div class="bar-raised">
+<h6 style="margin-left:190px; margin-top:30px;"> total sales</h6>
+      <canvas id="saleChart" style="width:100%;max-width:1050px; margin-left:20px; margin-top:40px; margin-right:30px;"></canvas>
+</div>
 {% endblock pageContent %}{% block ScriptBlock %}
 
 <script>
@@ -33,16 +40,18 @@ sales.forEach(function(sale){
 var barColors = colors.slice(0,items.length)
 
 new Chart("myChart", {
-  type: "bar",
+  type: "doughnut",
   data: {
     labels: items,
     datasets: [{
+    label: "stocks",
       backgroundColor: barColors,
       data: qty
-    }]
+    }
+    ]
   },
   options: {
-    legend: {display: false},
+    legend: {display: true},
     title: {
       display: true,
       text: "stock levels"
@@ -54,16 +63,24 @@ new Chart("lChart", {
   data: {
     labels: saleDate,
     datasets: [{
+     label:"sales",
       data: saleQty,
 	  fill:false,
 	  borderColor:"orange"
-    }]
+    },
+    {
+    label:"stocks",
+     data: qty,
+     fill:false,
+     borderColor:"blue"
+    }
+    ]
   },
   options: {
-    legend: {display: false},
+    legend: {display: true},
     title: {
       display: true,
-      text: ""
+      text: "sales vs stocks"
     }
   }
 });
