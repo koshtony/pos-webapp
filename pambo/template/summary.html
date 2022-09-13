@@ -12,7 +12,7 @@
     </div>
 </div>
 <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
-    <div class="mdc-card" style="background-color:aquamarine">
+    <div class="mdc-card" style="background-color:aquamarine" id="expTab">
         <form action="{{url_for('summaryInfo')}}" method="POST">
             <label>from</label>
             <input type="date" name="date1" id="date1">
@@ -26,7 +26,7 @@
                
              </a>
         </form>
-        <div class="table-responsive" id="expTab">
+        <div class="table-responsive">
             <table class="table table-bordered">
             <thead>
                 <tr class="bg-dark bg-gradient bg-opacity-50 text-light">
@@ -71,12 +71,16 @@
     expForm.innerHTML=`
     <form action='{{url_for('summaryInfo')}}' method="post" style="margin-left:250px">
         <label>Amount</label>
-        <br><br>
+        <br>
         <input type="text" name="amount" id="amount">
-        <br><br>
+        <br>
         <label>Desc/purpose</label>
-        <br><br>
+        <br>
         <input type="text" name="exp" id="exp">
+        <br>
+         <label>date</label>
+         <br>
+        <input type="date" name="dd" id="dd">
         <br><br>
         <input type="submit" value="submit">
     </form>

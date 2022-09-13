@@ -5,7 +5,7 @@ from flask import render_template,request,redirect,url_for,send_from_directory,j
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from datetime import datetime,date
-from pambo.grpProd import getCat,getProdCat,scanOut,getProds,prodOut,prodChange,salesFilter,prodFilter,retProd
+from pambo.grpProd import getCat,getProdCat,scanOut,getProds,prodOut,prodChange,salesFilter,prodFilter,retProd,graphSales
 from pambo.calc import profSum,expSum,countRes,numProd
 from pambo.mtrans import stk_push
 import random
@@ -17,17 +17,26 @@ def load_user(id):
 @app.route('/admin',methods=["GET",'POST'])
 @login_required
 def admin():
-    if current_user.user!="400":
+    if current_user.user!="500":
         return render_template('403.html')
     else:
         if request.method=="POST":
             userid=request.form["userid"]
             password=request.form["password"]
-            password=generate_password_hash(password)
-            userInfo=posUsers(user=userid,password=password)
-            posData.session.add(userInfo)
-            posData.session.commit()
-            return redirect(url_for('home'))
+            confirm=request.form["confirm"]
+            if password==confirm:
+                if str(posUsers.query.filter_by(user=userid).first().user) =="":
+                    password=generate_password_hash(password)
+                    userInfo=posUsers(user=userid,password=password)
+                    posData.session.add(userInfo)
+                    posData.session.commit()
+                    return redirect(url_for('home'))
+                else:
+                    flash("user already exists")
+
+                
+            else:
+                flash("password does not match")
         return render_template('add_user.html')
 #----- login route
 @app.route('/',methods=["GET","POST"])
@@ -37,7 +46,7 @@ def login():
         userid=request.form["userid"]
         password=request.form["password"]
         users=posUsers.query.filter_by(user=userid).first()
-        if users and users.password:
+        if users and check_password_hash(users.password,password):
             login_user(users)
             return redirect(url_for('home'))
         else: 
@@ -187,8 +196,9 @@ def summaryInfo():
         try:
             amount=request.form["amount"]
             exp=request.form["exp"]
+            dates=request.form["dd"]
             sumInfo=expenses(
-                amnt=amount,edesc=exp,edate=date.today()
+                amnt=amount,edesc=exp,edate=datetime.strptime(dates,"%Y-%m-%d")
             )
             posData.session.add(sumInfo)
             posData.session.commit()
@@ -260,6 +270,22 @@ def mpesa_pay():
     resp=stk_push()
     if resp[0]["info"]["ResponseCode"]=="0":
         return "<h1>success</h1>"
+# graphical reports url
+@app.route('/reports')
+def graphs():
+    prodx=[]
+    products_ = products.query.all()
+    sales_=sales.query.all()
+    for prods in products_:
+        scan={
+        "quant":round(prods.pQuant),
+        "name":prods.pname,
+        "price":prods.pPrice
+         }
+        prodx.append(scan)
+    sale_=graphSales()
+
+    return render_template('charts.html',products=prodx,sales=sale_)
 @app.errorhandler(404)
 def error404(error):
     return render_template('404.html'),404

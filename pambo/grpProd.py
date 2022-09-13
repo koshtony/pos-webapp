@@ -1,5 +1,6 @@
 import sqlite3
 from datetime import date,datetime
+from collections import defaultdict
 def getCat():
     conn=sqlite3.connect('./pambo/pos.db')
     rows=[]
@@ -58,6 +59,26 @@ def retProd(quant,name):
     conn=sqlite3.connect("./pambo/pos.db")
     conn.execute('update products set pQuant=pQuant+? where pname=?',(quant,name,))
     conn.commit()
+def sumSales():
+    conn=sqlite3.connect("./pambo/pos.db")
+    con=conn.cursor()
+    grpSales=con.execute('select sname,sDate,sum(sCost) as cost, sum(sPrice) as price,sum(sProfit) as profit, sum(sQuant) as qty from sales group by sname')
+    return grpSales
+def graphSales():
+    object=sumSales()
+    salesDict=[]
+    for obj in object:
+        sale={
+            "name":obj[0],
+            "date":datetime.strptime(obj[1].split(" ")[0],"%Y-%m-%d"),
+            "cost":obj[2],
+            "price":obj[3],
+            "profit":obj[4],
+            "quant":obj[5]
+        }
+        salesDict.append(sale)
+    return salesDict
+
 
 
 

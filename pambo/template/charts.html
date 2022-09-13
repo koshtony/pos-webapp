@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% block pageContent %}
+<div class="donut-raised">
+      <canvas id="myChart" style="width:100%;max-width:350px; margin-left:40px;"></canvas>
+</div>
+<div class="line-raised">
+      <canvas id="lChart"></canvas>
+</div>
+<div class="bar-raised">
+<h6 style="margin-left:190px; margin-top:30px;"> total sales</h6>
+      <canvas id="saleChart" style="width:100%;max-width:1050px; margin-left:20px; margin-top:40px; margin-right:30px;"></canvas>
+</div>
+{% endblock pageContent %}{% block ScriptBlock %}
+
+<script>
+colors=[
+	"red","green","yellow","brown",
+	"blue","aqua"
+]
+var prods=JSON.parse('{{ products | tojson | safe }}')
+var sales= JSON.parse('{{ sales | tojson | safe }}')
+var items = [];
+var qty=[]
+var price=[]
+saleItem=[]
+saleQty=[]
+saleDate=[]
+prods.forEach(function(prod){
+   items.push(prod.name)
+   qty.push(parseInt(prod.quant))
+}
+)
+sales.forEach(function(sale){
+  saleItem.push(sale.name)
+  saleQty.push(sale.quant)
+  saleDate.push(sale.date)
+}
+)
+
+var barColors = colors.slice(0,items.length)
+
+new Chart("myChart", {
+  type: "doughnut",
+  data: {
+    labels: items,
+    datasets: [{
+    label: "stocks",
+      backgroundColor: barColors,
+      data: qty
+    }
+    ]
+  },
+  options: {
+    legend: {display: true},
+    title: {
+      display: true,
+      text: "stock levels"
+    }
+  }
+});
+new Chart("lChart", {
+  type: "line",
+  data: {
+    labels: saleDate,
+    datasets: [{
+     label:"sales",
+      data: saleQty,
+	  fill:false,
+	  borderColor:"orange"
+    },
+    {
+    label:"stocks",
+     data: qty,
+     fill:false,
+     borderColor:"blue"
+    }
+    ]
+  },
+  options: {
+    legend: {display: true},
+    title: {
+      display: true,
+      text: "sales vs stocks"
+    }
+  }
+});
+new Chart("saleChart", {
+  type: "bar",
+  data: {
+    labels: saleItem,
+    datasets: [{
+      backgroundColor: barColors,
+      data: saleQty
+    }]
+  },
+  options: {
+    legend: {display: false},
+    title: {
+      display: true,
+      text: "total sales"
+    }
+  }
+});
+</script>
+{% endblock ScriptBlock %}
+

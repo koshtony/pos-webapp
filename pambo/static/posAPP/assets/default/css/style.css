@@ -47,3 +47,28 @@ body {
     margin-left: 0 !important;
     margin-right: 0 !important;
 }
+.donut-raised{
+    box-shadow: inset 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
+         height:400px;
+         width:750%;
+         overflow-x: auto;
+        overflow-y: hidden;
+}
+.bar-raised{
+    box-shadow: inset 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
+    height:400px;
+     width:800%; 
+     margin-left:350px;
+     overflow-x: auto;
+        overflow-y: hidden;
+}
+.line-raised{
+    box-shadow: inset 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
+    height:400px; 
+    width:1000%; 
+    margin-top:450px;
+    margin-left:100px;
+    overflow-x: auto;
+        overflow-y: hidden;
+
+}
