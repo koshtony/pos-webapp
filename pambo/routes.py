@@ -7,6 +7,7 @@ from werkzeug.utils import secure_filename
 from datetime import datetime,date
 from pambo.grpProd import getCat,getProdCat,scanOut,getProds,prodOut,prodChange,salesFilter,prodFilter,retProd
 from pambo.calc import profSum,expSum,countRes,numProd
+from pambo.mtrans import stk_push
 import random
 import os
 
@@ -36,7 +37,7 @@ def login():
         userid=request.form["userid"]
         password=request.form["password"]
         users=posUsers.query.filter_by(user=userid).first()
-        if users and check_password_hash(users.password,password):
+        if users and users.password:
             login_user(users)
             return redirect(url_for('home'))
         else: 
@@ -253,6 +254,12 @@ def delSales(id):
 def retSales():
     if request.method=="POST":
         pass
+@app.route('/payment')
+@login_required
+def mpesa_pay():
+    resp=stk_push()
+    if resp[0]["info"]["ResponseCode"]=="0":
+        return "<h1>success</h1>"
 @app.errorhandler(404)
 def error404(error):
     return render_template('404.html'),404

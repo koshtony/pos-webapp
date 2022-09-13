@@ -93,7 +93,7 @@
                                 <dt class="h4 fw-bold text-light">Discount</dt>
                                 <dd class="text-end py-1 px-2 rounded-0 bg-light">
                                     <input type="text" name="disc" id="disc" value="0">
-                                    <span class="h3 fw-bold" id="tax_amount">0.00</span>
+                                    <span class="h3 fw-bold" id="tax_amount"></span>
                                 </dd>
                                 <dt class="h4 fw-bold text-light">Grand Total</dt>
                                 <dd class="text-end py-1 px-2 rounded-0 bg-light">
@@ -102,8 +102,15 @@
                                     <input type="hidden" name="amount_change" value="0">
                                     <input type="text" name="grand_total" id="grand_total" style="font-weight:bolder ;"value="0">
                                     <span class="h3 fw-bold" id="grand_total"></span>
+                                    
                                 </dd>
+                                
                             </dl>
+                            <a href="{{url_for('mpesa_pay')}}">
+                            <button style="background-color:green;" type="button">
+                                checkout
+                                </button>
+                            </a>
                         </div>
                     </div>
                 </div>
