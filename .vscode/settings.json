@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/30afc0b4-3887-4322-a488-d22f77387322/microsoft.web/sites/subscriptions/30afc0b4-3887-4322-a488-d22f77387322/resourceGroups/pos/providers/Microsoft.Web/sites/pambo-electricals",
+    "appService.deploySubpath": "."
+}
