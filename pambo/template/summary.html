@@ -72,15 +72,15 @@
     <form action='{{url_for('summaryInfo')}}' method="post" style="margin-left:250px">
         <label>Amount</label>
         <br>
-        <input type="text" name="amount" id="amount">
+        <input type="text" name="amount" id="amount" required>
         <br>
         <label>Desc/purpose</label>
         <br>
-        <input type="text" name="exp" id="exp">
+        <input type="text" name="exp" id="exp" required>
         <br>
          <label>date</label>
          <br>
-        <input type="date" name="dd" id="dd">
+        <input type="date" name="dd" id="dd" required>
         <br><br>
         <input type="submit" value="submit">
     </form>
