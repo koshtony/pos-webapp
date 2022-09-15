@@ -146,15 +146,19 @@ def posPage():
         disc=request.form.get("disc")
         scans=scanOut(serial)
         if len(scans)>0:
-            code=str(scans[0][0])+str(random.randrange(1,100))
-            scanned=sales(
-            serial=scans[0][0],scode=code,sname=scans[0][1],sImage=scans[0][2],
-            sDate=date.today(),sCost=scans[0][3],sPrice=int(scans[0][4])*int(qty)-int(disc),
-            sProfit=int(scans[0][4])*int(qty)-int(disc)-int(scans[0][5])*int(qty),sDisc=float(disc),sQuant=qty,sCreator=current_user.user
-            )
-            posData.session.add(scanned)
-            posData.session.commit()
-            prodChange(qty,serial)
+            try:
+                code=str(scans[0][0])+str(random.randrange(1,100))
+                scanned=sales(
+                serial=scans[0][0],scode=code,sname=scans[0][1],sImage=scans[0][2],
+                sDate=date.today(),sCost=scans[0][3],sPrice=int(scans[0][4])*int(qty)-int(disc),
+                sProfit=int(scans[0][4])*int(qty)-int(disc)-int(scans[0][5])*int(qty),sDisc=float(disc),sQuant=qty,sCreator=current_user.user
+                )
+                posData.session.add(scanned)
+                posData.session.commit()
+                prodChange(qty,serial)
+            except:
+                flash("input error")
+                
     prods=products.query.all()
     scans=[]
     for prods in prods:

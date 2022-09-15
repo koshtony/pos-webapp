@@ -8,6 +8,11 @@
 </div>
 <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
     <div class="mdc-card" style="background-color: aquamarine";>
+        {% with messages =get_flashed_messages() %}
+                                        {% for message in messages %}
+                                        <p style="color:red">{{message}}</p>
+                                        {% endfor %}
+                                        {% endwith %}
         <form method="POST" id="pos-form">
             <fieldset>
                 <legend>Add Products</legend>
@@ -140,6 +145,8 @@
             newScans[1]="item not found"
             newScans[2]="item not found"
             newScans[3]=0
+            newScans[4]=0
+            disc=0;
         }
         sum=parseFloat($('#grand_total').val());
         sum+=newScans[4]
@@ -156,6 +163,9 @@
         },
         success:function()
         {
+            $("#serial").val("")
+            $("#disc").val("")
+            $("#qty").val("")
             newLine='<tr><td>'+newScans[0]+'</td>'+'<td>'+newScans[1]+'</td>'+'<td>'+newScans[2]+'</td>'+'<td>'+newScans[3]+'</td>'+'<td>'+newScans[4]+'</td>'+'</tr>'
             $('#tbc').append(newLine)
         }
