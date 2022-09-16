@@ -1,6 +1,6 @@
 from pambo import posData,logins
 from datetime import datetime
-from flask_login import current_user,UserMixin,login_user,logout_user,UserMixin,login_required,LoginManager
+from flask_login import UserMixin
 class posUsers(posData.Model,UserMixin): #users auth table
     id=posData.Column(posData.Integer,primary_key=True)
     user=posData.Column(posData.String(100),nullable=False)
@@ -41,6 +41,10 @@ class sales(posData.Model): # sales info
     sDisc=posData.Column(posData.Float,nullable=True)
     sQuant=posData.Column(posData.Float,nullable=True)
     sProfit=posData.Column(posData.Float,nullable=False)
+    sDebt=posData.Column(posData.Float,nullable=True)
+    sDebtor=posData.Column(posData.String(100),nullable=True)
+    sPhone=posData.Column(posData.String(100),nullable=True)
+    sPay=posData.Column(posData.DateTime,nullable=True)
     sCreator=posData.Column(posData.String(100),nullable=False)
 class customer(posData.Model): # customer info 
     cUid=posData.Column(posData.Integer,primary_key=True)
@@ -56,4 +60,3 @@ class expenses(posData.Model):
     amnt=posData.Column(posData.Float,nullable=True)
     edesc=posData.Column(posData.String(100),nullable=True)
     edate=posData.Column(posData.DateTime,nullable=True)
-#----load users

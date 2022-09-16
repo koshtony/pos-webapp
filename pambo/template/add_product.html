@@ -20,7 +20,7 @@
             <div class="form-group mb-3" style="margin-left:200px;">
                 <label class="control-label">Serial No:</label>
                 <br>
-                <input type="text" name="serial" id="serial" size="30" required>
+                <input type="text" name="serial" id="serial" size="30">
            
             </div>
             <div class="form-group mb-3" style="margin-left:200px;">
@@ -85,7 +85,7 @@
             <div class="form-group mb-3" style="margin-left:250px">
                 <label class="control-label">Product Image:</label>
                 <br>
-                <input type="file" name="pi" id="pi" size="30" accept="image/png, image/jpg, image/jpeg" required>
+                <input type="file" name="pi" id="pi" size="30" accept="image/png, image/jpg, image/jpeg">
            
             </div>
             <div class="form-group mb-3" style="margin-left:250px">
@@ -105,9 +105,9 @@
     var formElem=document.getElementById("products")
     formElem.innerHTML=`
     <form action="{{url_for('addProd')}}" method="POST" style="margin-left:150">
-        <label>unique name for each item </label>
+        <label>unique name for each item separated by comma</label>
         <br> <br>
-        <input type="text" id="dict" name="dict">
+        <textarea rows="5" cols="50" name="dict" id="dict" ></textarea>
         <br> <br>
         <input type="submit" value="submit">
     </form>

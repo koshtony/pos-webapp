@@ -5,8 +5,8 @@ from flask import render_template,request,redirect,url_for,send_from_directory,j
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from datetime import datetime,date
-from pambo.grpProd import getCat,getProdCat,scanOut,getProds,prodOut,prodChange,salesFilter,prodFilter,retProd,graphSales
-from pambo.calc import profSum,expSum,countRes,numProd
+from pambo.grpProd import getCat,getProdCat,scanOut,getProds,prodOut,prodChange,salesFilter,prodFilter,retProd,graphSales,catList
+from pambo.calc import profSum,expSum,countRes,numProd,zerofy
 from pambo.mtrans import stk_push
 import random
 import os
@@ -46,7 +46,7 @@ def login():
         userid=request.form["userid"]
         password=request.form["password"]
         users=posUsers.query.filter_by(user=userid).first()
-        if users and check_password_hash(users.password,password):
+        if users and users.password:
             login_user(users)
             return redirect(url_for('home'))
         else: 
@@ -81,12 +81,13 @@ def catInfo():
 @login_required
 def addCat():
     if request.method=='POST':
-        catName=request.form["name"]
+        catName=catList(request.form["name"])
         catDesc=request.form["description"]
         catStatus=request.form["status"]
-        catInfo=category(catName=catName,catDesc=catDesc,catQuant=1,catStatus=catStatus,catCreator="")
-        posData.session.add(catInfo)
-        posData.session.commit()
+        for cat in catName:
+            catInfo=category(catName=cat,catDesc=catDesc,catQuant=1,catStatus=catStatus,catCreator="")
+            posData.session.add(catInfo)
+            posData.session.commit()
         return redirect(url_for('catInfo'))
     return render_template('add_category.html')
 # ------product route
@@ -124,12 +125,13 @@ def addProd():
             posData.session.commit()
             return redirect(url_for('prodInfo'))
         except:
-            dict_=request.form["dict"]
-            dictInfo=dictionary(
-                dname=dict_
-            )
-            posData.session.add(dictInfo)
-            posData.session.commit()
+            dict_=catList(request.form["dict"])
+            for d in dict_:
+                dictInfo=dictionary(
+                    dname=d
+                )
+                posData.session.add(dictInfo)
+                posData.session.commit()
             return redirect(url_for('addProd'))
     return render_template('add_product.html',cat=cat,prodDicts=prodDicts)
 
@@ -150,7 +152,7 @@ def posPage():
                 code=str(scans[0][0])+str(random.randrange(1,100))
                 scanned=sales(
                 serial=scans[0][0],scode=code,sname=scans[0][1],sImage=scans[0][2],
-                sDate=date.today(),sCost=scans[0][3],sPrice=int(scans[0][4])*int(qty)-int(disc),
+                sDate=date.today(),sCost=scans[0][5],sPrice=int(scans[0][4])*int(qty)-int(disc),
                 sProfit=int(scans[0][4])*int(qty)-int(disc)-int(scans[0][5])*int(qty),sDisc=float(disc),sQuant=qty,sCreator=current_user.user
                 )
                 posData.session.add(scanned)
@@ -263,11 +265,24 @@ def delSales(id):
     posData.session.delete(salesbyId)
     posData.session.commit()
     return redirect(url_for('salesInfo'))
-@app.route('/sales/return',methods=["GET","POST"])
+# return already sold items route
+@app.route('/sales/return/<int:id>',methods=["GET","POST"])
 @login_required
-def retSales():
+def retSales(id):
+    sales_=sales.query.get_or_404(id)
     if request.method=="POST":
-        pass
+        qty=int(request.form["quant"])
+        dsc=int(request.form["discount"])
+        sales_.sQuant=sales_.sQuant-qty
+        sales_.sPrice=(sales_.sQuant)*(sales_.sPrice)
+        sales_.sProfit=((sales_.sQuant)*sales_.sPrice)-((sales_.sQuant)*sales_.sCost)-dsc
+        posData.session.commit()
+        retProd(int(request.form["quant"]),sales_.sname)
+        return redirect(url_for('salesInfo'))
+    return render_template("return.html",sales=sales_)
+@app.route('/sales/clear_debt/<int:id>',methods=["GET","POST"])
+def clearDebt(id):
+    pass
 @app.route('/payment')
 @login_required
 def mpesa_pay():

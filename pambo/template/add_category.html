@@ -13,12 +13,12 @@
     <form action="{{url_for('addCat')}}" method="POST" id="category-form" style="margin-left:250px; background-color:aqua">
         <div class="form-group mb-3">
             <label for="name" class="control-label">Category Name</label>
-            <input type="text" name="name" id="name" size="50" required>
+           <textarea rows="5" cols="50" name="name" id="name"  required></textarea>
        
         </div>
         <div class="form-group mb-3">
             <label for="description" class="control-label">Description</label>
-            <textarea rows="5" cols="50" name="description" id="description"  required></textarea>
+            <textarea rows="5" cols="50" name="description" id="description" ></textarea>
         </div>
         <div class="form-group mb-3" style="margin-left:250px">
             <label for="status" class="control-label">Status</label>

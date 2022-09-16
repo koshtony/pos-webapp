@@ -78,6 +78,8 @@ def graphSales():
         }
         salesDict.append(sale)
     return salesDict
+def catList(strings):
+    return strings.split(",")
 
 
 

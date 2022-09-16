@@ -22,4 +22,8 @@ def numProd(object):
     for obj in object:
         total.append(obj.pQuant)
     return sum(total)
+def zerofy(x):
+    if x<0:
+        x=0;
+    return x
 
