@@ -46,7 +46,7 @@ def login():
         userid=request.form["userid"]
         password=request.form["password"]
         users=posUsers.query.filter_by(user=userid).first()
-        if users and users.password:
+        if users and check_password_hash(users.password,password):
             login_user(users)
             return redirect(url_for('home'))
         else: 
