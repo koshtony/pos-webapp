@@ -3,7 +3,13 @@
     <div class="mdc-card py-2">
         <div class="d-flex justify-content-between align-items-center">
             <h4 class="card-title mb-0">Sales List</h4>
-            <input list="magicHouses" id="iname" name="iname" placeholder="search here..." />
+            <input list="magicHouses" id="cname" name="cname" placeholder="search customer here..." />
+          <datalist id="magicHouses">
+                {% for sale in sales %}
+                <option value="{{sale.sDebtor}}">{{sale.sDebtor}}</option>
+                {% endfor %}
+          </datalist>
+            <input list="magicHouses" id="iname" name="iname" placeholder="search item here..." />
           <datalist id="magicHouses">
                 {% for sale in sales %}
                 <option value="{{sale.sname}}">{{sale.sname}}</option>
@@ -50,6 +56,10 @@
                         <th class="text-center py-1">Profit</th>
                         <th class="text-center py-1">Discount</th>
                         <th class="text-center py-1">Quantity</th>
+                        <th class="text-center py-1">customer name</th>
+                        <th class="text-center py-1">customer phone</th>
+                         <th class="text-center py-1">Initial debt</th>
+                        <th class="text-center py-1">current debt</th>
                         <th class="text-center py-1">Seller id</th>
                         <th class="text-center py-1">Action</th>
                     </tr>
@@ -65,6 +75,10 @@
                         <td id="profit" class="px-2 py-1 text-start">{{sale.sProfit}}</td>
                         <td id="profit" class="px-2 py-1 text-start">{{sale.sDisc}}</td>
                         <td id="profit" class="px-2 py-1 text-start">{{sale.sQuant}}</td>
+                        <td id="profit" class="px-2 py-1 text-start">{{sale.sDebtor}}</td>
+                        <td id="profit" class="px-2 py-1 text-start">{{sale.sPhone}}</td>
+                         <td id="profit" class="px-2 py-1 text-start">{{sale.sDebtin}}</td>
+                        <td id="profit" class="px-2 py-1 text-start">{{sale.sDebt}}</td>
                         <td class="px-2 py-1 text-start">{{sale.sCreator}}</td>
                         <td class="px-2 py-1 text-start">
                         <a href="/sales/return/{{sale.sid}}">
@@ -73,8 +87,13 @@
                             </button>
                             </a>
                             <a href="/sales/del/{{sale.sid}}">
-                            <button class="mdc-button mdc-button--raised p-1 icon-button filled-button--danger mdc-ripple-upgraded delete-data" type="button" data-id="" data-code="" title="Delete">
+                            <button onclick="confDel();" class="mdc-button mdc-button--raised p-1 icon-button filled-button--danger mdc-ripple-upgraded delete-data" type="button" data-id="" data-code="" title="Delete">
                                 <i class="material-icons mdc-button__icon">deleteoutline</i>
+                            </button>
+                            </a>
+                            <a href="/sales/debt/{{sale.sid}}">
+                            <button style="background-color:green">
+                               <i class="fa fa-money"></i>
                             </button>
                             </a>
                     </tr>
@@ -90,9 +109,19 @@
 </div>
 {% endblock pageContent %} {% block ScriptBlock %}
 <script>
-
+function confDel(){
+alert("coonfirm sale deletion");
+}
     $(document).ready(function(){
         $("#iname").on("keyup",function(){
+            var value=$(this).val().toLowerCase();
+            $("#saletab tr").filter(function(){
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+     $(document).ready(function(){
+        $("#cname").on("keyup",function(){
             var value=$(this).val().toLowerCase();
             $("#saletab tr").filter(function(){
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)

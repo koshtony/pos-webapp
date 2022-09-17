@@ -86,14 +86,13 @@
                     <div class="col-4 bg-gradient bg-dark bg-opacity-50 border h-100">
                         <div class="col-12 py-4 px-2">
                             <dl>
-                                <dt class="h4 fw-bold text-light">Sub Total</dt>
+                                <dt class="h4 fw-bold text-light">customer Info</dt>
                                 <dd class="text-end py-1 px-2 rounded-0 bg-light">
-                                    <input type="hidden" name="sub_total" value="0">
-                                    <span class="h3 fw-bold" id="sub_total">0.00</span>
-                                </dd>
-                                <dt class="h4 fw-bold text-light">Tax Inclusive (%)</dt>
-                                <dd>
-                                    <input type="number" class="form-control form-control-lg rounded-0 text-end" step="any" min="0" max="100" name="tax" value="0">
+
+                                    <input type="text" name="cname" id="cname" placeholder="customer name" required>
+                                    <input type="text" name="cphone" id="cphone" placeholder="customer phone">
+                                    <input type="text" name="debt" id="debt" placeholder="register debt amount" required>
+                                    
                                 </dd>
                                 <dt class="h4 fw-bold text-light">Discount</dt>
                                 <dd class="text-end py-1 px-2 rounded-0 bg-light">
@@ -102,9 +101,6 @@
                                 </dd>
                                 <dt class="h4 fw-bold text-light">Grand Total</dt>
                                 <dd class="text-end py-1 px-2 rounded-0 bg-light">
-                                    <input type="hidden" name="grand_total" value="0">
-                                    <input type="hidden" name="tendered_amount" value="0">
-                                    <input type="hidden" name="amount_change" value="0">
                                     <input type="text" name="grand_total" id="grand_total" style="font-weight:bolder ;"value="0">
                                     <span class="h3 fw-bold" id="grand_total"></span>
                                     
@@ -133,6 +129,7 @@
         var ser=$('#serial').val()
         var quant=$('#qty').val()
         var disc=$('#disc').val()
+        var debt=$('#debt').val()
         //$('#serial').val("")
         scans.forEach(function(scan){
             if(scan.name==ser){
@@ -147,10 +144,11 @@
             newScans[3]=0
             newScans[4]=0
             disc=0;
+            debt=0;
         }
         sum=parseFloat($('#grand_total').val());
         sum+=newScans[4]
-        sum=sum-disc
+        sum=sum-disc-debt
         $('#grand_total').val(sum)
 
         $.ajax({
@@ -159,7 +157,11 @@
         data:{
           serial:$("#serial").val(),
           disc:$("#disc").val(),
-          qty:$('#qty').val()
+          qty:$('#qty').val(),
+          debt:$('#debt').val(),
+          cphone:$('#cphone').val(),
+          cname:$('#cname').val()
+
         },
         success:function()
         {

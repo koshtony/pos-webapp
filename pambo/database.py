@@ -41,6 +41,7 @@ class sales(posData.Model): # sales info
     sDisc=posData.Column(posData.Float,nullable=True)
     sQuant=posData.Column(posData.Float,nullable=True)
     sProfit=posData.Column(posData.Float,nullable=False)
+    sDebtin=posData.Column(posData.Float,nullable=True)
     sDebt=posData.Column(posData.Float,nullable=True)
     sDebtor=posData.Column(posData.String(100),nullable=True)
     sPhone=posData.Column(posData.String(100),nullable=True)
@@ -60,3 +61,8 @@ class expenses(posData.Model):
     amnt=posData.Column(posData.Float,nullable=True)
     edesc=posData.Column(posData.String(100),nullable=True)
     edate=posData.Column(posData.DateTime,nullable=True)
+class credit(posData.Model):
+    did=posData.Column(posData.Integer,primary_key=True)
+    dname=posData.Column(posData.String(100),nullable=True)
+    amount=posData.Column(posData.Float,nullable=True)
+    ddate=posData.Column(posData.DateTime,nullable=True)

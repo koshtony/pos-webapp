@@ -1,5 +1,5 @@
 from pambo import app,posData,logins
-from pambo.database import posUsers,products,sales,customer,expenses,category,dictionary
+from pambo.database import posUsers,products,sales,customer,expenses,category,dictionary,credit
 from flask_login import current_user,UserMixin,login_user,logout_user,UserMixin,login_required,LoginManager
 from flask import render_template,request,redirect,url_for,send_from_directory,jsonify,flash,send_file;
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -146,14 +146,18 @@ def posPage():
         serial=request.form.get("serial")
         qty=request.form.get("qty")
         disc=request.form.get("disc")
+        cname=request.form.get("cname")
+        cphone=request.form.get("cphone")
+        debt=request.form.get("debt")
         scans=scanOut(serial)
         if len(scans)>0:
             try:
-                code=str(scans[0][0])+str(random.randrange(1,100))
+                code=str(scans[0][0])+str(random.randrange(1,100))+str(cname)
                 scanned=sales(
                 serial=scans[0][0],scode=code,sname=scans[0][1],sImage=scans[0][2],
                 sDate=date.today(),sCost=scans[0][5],sPrice=int(scans[0][4])*int(qty)-int(disc),
-                sProfit=int(scans[0][4])*int(qty)-int(disc)-int(scans[0][5])*int(qty),sDisc=float(disc),sQuant=qty,sCreator=current_user.user
+                sProfit=int(scans[0][4])*int(qty)-int(disc)-int(scans[0][5])*int(qty)-float(debt),sDisc=float(disc),sQuant=qty,
+                sDebtin=float(debt),sDebt=float(debt),sDebtor=cname,sPhone=cphone,sCreator=current_user.user
                 )
                 posData.session.add(scanned)
                 posData.session.commit()
@@ -276,13 +280,32 @@ def retSales(id):
         sales_.sQuant=sales_.sQuant-qty
         sales_.sPrice=(sales_.sQuant)*(sales_.sPrice)
         sales_.sProfit=((sales_.sQuant)*sales_.sPrice)-((sales_.sQuant)*sales_.sCost)-dsc
+        sales_.sDisc=dsc
         posData.session.commit()
         retProd(int(request.form["quant"]),sales_.sname)
         return redirect(url_for('salesInfo'))
     return render_template("return.html",sales=sales_)
-@app.route('/sales/clear_debt/<int:id>',methods=["GET","POST"])
+#----clear debt route
+@app.route('/sales/debt/<int:id>',methods=["GET","POST"])
+@login_required
 def clearDebt(id):
-    pass
+    d_sales=sales.query.get_or_404(id)# debtor sales
+    d_credit=credit.query.filter(credit.did==id).all() #debtors credit
+    if request.method=="POST":
+        paid=float(request.form["pay"])
+        paydate=datetime.strptime(request.form["paydate"],"%Y-%m-%d")
+        d_sales.sDebt=d_sales.sDebt-paid,
+        d_sales.sPay=paydate
+        credit_=credit(
+            did=d_sales.sid,
+            dname=d_sales.sDebtor,
+            amount=float(request.form["pay"]),
+            ddate=paydate
+        )
+        posData.session.add(credit_)
+        posData.session.commit()
+        return redirect(url_for('salesInfo'))
+    return render_template('debts.html',sales=d_sales,credits=d_credit)
 @app.route('/payment')
 @login_required
 def mpesa_pay():

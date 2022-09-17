@@ -4,7 +4,7 @@
         <div class="d-flex justify-content-between align-items-center">
             <h4 class="card-title mb-0">return product Info</h4>
             <div class="text-start">
-                <a href="{{url_for('prodInfo')}}"><button  id="create_new"><span> Products</span></button></a>
+                <a href="{{url_for('salesInfo')}}"><button  id="create_new"><span> sales</span></button></a>
             </div>
             
         </div>
@@ -32,19 +32,4 @@
 </div>
 </div>
 {% endblock pageContent %}
-{% block ScriptBlock %}
-<script>
-    function addDict(){
-    var formElem=document.getElementById("products")
-    formElem.innerHTML=`
-    <form action="{{url_for('addProd')}}" method="POST" style="margin-left:150">
-        <label>unique name for each item </label>
-        <br> <br>
-        <input type="text" id="dict" name="dict">
-        <br> <br>
-        <input type="submit" value="submit">
-    </form>
-`
-    }
-</script>
-{% endblock ScriptBlock %}
+
