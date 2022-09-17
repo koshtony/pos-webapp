@@ -17,7 +17,7 @@ def load_user(id):
 @app.route('/admin',methods=["GET",'POST'])
 @login_required
 def admin():
-    if current_user.user!="500":
+    if current_user.user!="200":
         return render_template('403.html')
     else:
         if request.method=="POST":
