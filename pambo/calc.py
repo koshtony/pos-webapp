@@ -26,4 +26,9 @@ def zerofy(x):
     if x<0:
         x=0;
     return x
+def sumDebt(credits):
+    paid=[]
+    for credit in credits:
+        paid.append(credit.amount)
+    return sum(paid)
 

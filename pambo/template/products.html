@@ -89,8 +89,8 @@
                             </button>
                             </a>
                             <a href="/products/delete/{{prod.pid}}">
-                            <button class="mdc-button mdc-button--raised p-1 icon-button filled-button--danger mdc-ripple-upgraded delete-data" type="button" data-id="" title="Delete">
-                                <i class="material-icons mdc-button__icon">deleteoutline</i>
+                            <button onclick="delAlert();" class="mdc-button mdc-button--raised p-1 icon-button filled-button--danger mdc-ripple-upgraded delete-data" type="button" data-id="" title="Delete">
+                                <i class="material-icons mdc-button__icon">delete</i>
                             </button>
                             </a>
                         </td>
@@ -146,6 +146,9 @@
                 </tbody>
             </table>
         `
+    }
+    function delAlert(){
+        alert("confirm deletion else refresh")
     }
 </script>
 

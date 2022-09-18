@@ -4,6 +4,7 @@
         <div class="d-flex justify-content-between align-items-center">
             <h4 class="card-title mb-0">Category List</h4>
             <div class="text-start">
+                <button onclick="catList();" class="btn btn-success" id="catlist"><span>category list</span></button></a>
                 <a href="{{url_for('addCat')}}"><button class="btn btn-primary bg-gradient btn-sm rounded-0" id="create_new"><i class="mdi mdi-plus"></i><span> Add Category</span></button></a>
             </div>
         </div>
@@ -11,7 +12,7 @@
 </div>
 <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
     <div class="mdc-card">
-        <div class="table-responsive">
+        <div class="table-responsive" id="categories">
             <table class="table table-striped table-bordered">
                 <colgroup>
                     <col width="5%">
@@ -50,4 +51,54 @@
     </div>
 </div>
 {% endblock pageContent %} {% block ScriptBlock %}
+<script>
+function catList(){
+    var elem=document.getElementById("categories")
+    elem.innerHTML=`
+    <table class="table table-striped table-bordered">
+            <colgroup>
+                <col width="5%">
+                <col width="20%">
+                <col width="20%">
+                <col width="25%">
+                <col width="15%">
+                <col width="15%">
+            </colgroup>
+            <thead style="background-color:yellow">
+                <tr>
+                    <th class="text-center py-1">#</th>
+                    <th class="text-center py-1">Category Name</th>
+                    <th class="text-center py-1">category Desc</th>
+                    <th class="text-center py-1">category Qty</th>
+                    <th class="text-center py-1">category status</th>
+                    <th class="text-center py-1">Action</th>
+                </tr>
+            </thead>
+            <tbody id="prodtab">
+                {% for cat in cats %}
+                <tr>
+                    <td class="px-2 py-1 text-center">{{cat.catId}}</td>
+                    <td class="px-2 py-1 text-start">{{cat.catName}}</td>
+                    <td class="px-2 py-1 text-start">{{cat.catDesc}}</td>
+                    <td class="px-2 py-1 text-start">{{cat.catQuant}}</td>
+                    <td class="px-2 py-1 text-start">{{cat.catStatus}}</td>
+                    <td class="px-2 py-1 text-start">
+                        <a href="/category/del/{{cat.catId}}">
+                        <button  onclick="confDel();" class="mdc-button mdc-button--raised p-1 icon-button filled-button--light mdc-ripple-upgraded view-data" type="button" data-id="" title="View Receipt">
+                            delete
+                        </button>
+                        </a>
+                        
+                        </td>
+                      
+                </tr>
+               {% endfor %}
+            </tbody>
+        </table>
+    `
+}
+function confDel(){
+    alert("confirm deletion else refresh")
+}
+</script>
 {% endblock ScriptBlock %}

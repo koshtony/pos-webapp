@@ -6,7 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from datetime import datetime,date
 from pambo.grpProd import getCat,getProdCat,scanOut,getProds,prodOut,prodChange,salesFilter,prodFilter,retProd,graphSales,catList
-from pambo.calc import profSum,expSum,countRes,numProd,zerofy
+from pambo.calc import profSum,expSum,numProd,sumDebt
 from pambo.mtrans import stk_push
 import random
 import os
@@ -17,7 +17,8 @@ def load_user(id):
 @app.route('/admin',methods=["GET",'POST'])
 @login_required
 def admin():
-    if current_user.user!="200":
+    users_=posUsers.query.all()
+    if current_user.user!="500":
         return render_template('403.html')
     else:
         if request.method=="POST":
@@ -25,7 +26,8 @@ def admin():
             password=request.form["password"]
             confirm=request.form["confirm"]
             if password==confirm:
-                if str(posUsers.query.filter_by(user=userid).first().user) =="":
+                
+                if posUsers.query.filter_by(user=userid).first() ==None:
                     password=generate_password_hash(password)
                     userInfo=posUsers(user=userid,password=password)
                     posData.session.add(userInfo)
@@ -37,7 +39,15 @@ def admin():
                 
             else:
                 flash("password does not match")
-        return render_template('add_user.html')
+        return render_template('add_user.html',users=users_)
+@app.route('/admin/del/<int:id>')
+@login_required
+def delUser(id):
+    delUser=posUsers.query.get_or_404(id)
+    posData.session.delete(delUser)
+    posData.session.commit()
+    return redirect(url_for('admin'))
+
 #----- login route
 @app.route('/',methods=["GET","POST"])
 def login():
@@ -76,7 +86,8 @@ def home():
 @login_required
 def catInfo():
     cat=getCat()
-    return render_template('category.html',cat=cat)
+    cats=category.query.all()
+    return render_template('category.html',cat=cat,cats=cats)
 @app.route('/add_category',methods=['GET','POST'])
 @login_required
 def addCat():
@@ -91,6 +102,13 @@ def addCat():
         return redirect(url_for('catInfo'))
     return render_template('add_category.html')
 # ------product route
+@app.route('/category/del/<int:id>')
+@login_required
+def delCat(id):
+    catInfo=category.query.get_or_404(id)
+    posData.session.delete(catInfo)
+    posData.session.commit()
+    return redirect(url_for('catInfo'))
 @app.route('/products')
 @login_required
 def prodInfo():
@@ -120,7 +138,9 @@ def addProd():
                 pCat=pcat,pImage=imFile.filename,pQuant=pq,pCost=pcost,pPrice=pp,pStatus=status,
                 pDate=date.today(),pShop=shop,pCreator=""
             )
-            imFile.save(os.path.join("./pambo/images/",secure_filename(imFile.filename)))
+            print(imFile)
+            if imFile.filename!="":
+                imFile.save(os.path.join("./pambo/images/",secure_filename(imFile.filename)))
             posData.session.add(prodInfo)
             posData.session.commit()
             return redirect(url_for('prodInfo'))
@@ -259,7 +279,8 @@ def editProd(id):
         prodByid.pImage=Imfile.filename
         prodByid.pDate=date.today()
         posData.session.commit()
-        Imfile.save(os.path.join('./pambo/images/',secure_filename(Imfile.filename)))
+        if Imfile.filename!="":
+            Imfile.save(os.path.join('./pambo/images/',secure_filename(Imfile.filename)))
         return redirect(url_for('prodInfo'))
     return render_template('proEdit.html',prodbyid=prodByid,prodDicts=prodDicts)
 @app.route('/sales/del/<int:id>')
@@ -294,18 +315,19 @@ def clearDebt(id):
     if request.method=="POST":
         paid=float(request.form["pay"])
         paydate=datetime.strptime(request.form["paydate"],"%Y-%m-%d")
-        d_sales.sDebt=d_sales.sDebt-paid,
+        d_sales.sDebt=d_sales.sDebt-paid
         d_sales.sPay=paydate
         credit_=credit(
             did=d_sales.sid,
             dname=d_sales.sDebtor,
-            amount=float(request.form["pay"]),
+            amount=paid,
             ddate=paydate
         )
         posData.session.add(credit_)
         posData.session.commit()
         return redirect(url_for('salesInfo'))
-    return render_template('debts.html',sales=d_sales,credits=d_credit)
+    bal=d_sales.sDebtin-float(sumDebt(d_credit))
+    return render_template('debts.html',sales=d_sales,credits=d_credit,bal=bal)
 @app.route('/payment')
 @login_required
 def mpesa_pay():

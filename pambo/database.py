@@ -62,7 +62,8 @@ class expenses(posData.Model):
     edesc=posData.Column(posData.String(100),nullable=True)
     edate=posData.Column(posData.DateTime,nullable=True)
 class credit(posData.Model):
-    did=posData.Column(posData.Integer,primary_key=True)
+    id=posData.Column(posData.Integer,primary_key=True)
+    did=posData.Column(posData.Integer,nullable=False)
     dname=posData.Column(posData.String(100),nullable=True)
     amount=posData.Column(posData.Float,nullable=True)
     ddate=posData.Column(posData.DateTime,nullable=True)

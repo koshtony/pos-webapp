@@ -32,8 +32,69 @@
 
 <body>
     <script src="/static/posAPP/assets/material-admin/js/preloader.js"></script>
+    <style>
+  table { 
+	width: 750px; 
+	border-collapse: collapse; 
+	margin:50px ;
+    margin-left: 500px;
+	}
+
+tr:nth-of-type(odd) { 
+	background: #eee; 
+	}
+
+th { 
+	background: #3498db; 
+	color: white; 
+	font-weight: bold; 
+	}
+
+td, th { 
+	padding: 10px; 
+	border: 1px solid #ccc; 
+	text-align: left; 
+	font-size: 18px;
+	}
+@media 
+only screen and (max-width: 760px),
+(min-device-width: 768px) and (max-device-width: 1024px)  {
+
+	table { 
+	  	width: 100%; 
+        
+	}
+
+	/* Force table to not be like tables anymore */
+	table, thead, tbody, th, td, tr { 
+		display: block; 
+	}
+	
+	/* Hide table headers (but not display: none;, for accessibility) */
+	thead tr { 
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	}
+	
+	tr { border: 1px solid #ccc; }
+	
+	td { 
+		/* Behave  like a "row" */
+		border: none;
+		border-bottom: 1px solid #eee; 
+		position: relative;
+		padding-left: 50%; 
+	}
+
+
+
+}
+    </style>
+
     <div class="body-wrapper">
         <div class="main-wrapper">
+            
             <div class="page-wrapper full-page-wrapper d-flex align-items-center justify-content-center">
                 <main class="auth-page">
                     <div class="mdc-layout-grid">
@@ -41,8 +102,10 @@
                             <div class="stretch-card mdc-layout-grid__cell--span-4-desktop mdc-layout-grid__cell--span-1-tablet"></div>
                             <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-4-desktop mdc-layout-grid__cell--span-6-tablet">
                                 <div class="mdc-card">
+                                    
                                     <form id="login-user" onclick="matchPass();" action="{{url_for('admin')}}" method="post">
                                         <h3 class="text-center"> Seller's Admin</h3>
+                                        
                                         <a href="{{url_for('home')}}">
                                             <button>home</button>
                                         </a>
@@ -94,7 +157,39 @@
             </div>
         </div>
     </div>
-   
+    <table id="salesTab" style="margin-left:200px">
+        <colgroup>
+            <col width="5%">
+            <col width="20%">
+            <col width="20%">
+            <col width="25%">
+            <col width="15%">
+            <col width="15%">
+        </colgroup>
+        <thead>
+            <tr>
+                <th >#</th>
+                <th >user id</th>
+                <th >Action</th>
+                 
+            </tr>
+        </thead>
+        <tbody id="saletab">
+          {% for user in users %}
+            <tr>
+                <td >{{user.id}}</td>
+                <td >{{user.user}}</td> 
+                <td >
+                    <a href="/admin/del/{{user.id}}">
+                        <button  class="mdc-button mdc-button--raised p-1 icon-button filled-button--light mdc-ripple-upgraded view-data" type="button" data-id="" title="View Receipt">
+                            delete
+                        </button>
+                        </a>
+                </td>   
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
     <script src="/static/posAPP/assets/material-admin/vendors/js/vendor.bundle.base.js"></script>
     <script src="/static/posAPP/assets/material-admin/js/material.js"></script>
