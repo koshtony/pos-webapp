@@ -65,6 +65,7 @@
                     </tr>
                 </thead>
                 <tbody id="saletab">
+                    {% if current_user.user=="500" %}
                     {% for sale in sales %}
                     <tr>
                         <td class="px-2 py-1 text-center">{{sale.sid}}</td>
@@ -97,13 +98,61 @@
                             </button>
                             </a>
                     </tr>
+                    
+                  
                     {% endfor %}
+                    {% elif current_user!="500" %}
+                    {% for sale in sales %}
+                    {% if sale.sCreator==current_user.user %}
+                    <tr>
+                        <td class="px-2 py-1 text-center">{{sale.sid}}</td>
+                        <td class="px-2 py-1 text-start">{{sale.sDate}}</td>
+                        <td class="px-2 py-1 text-start">{{sale.scode}}</td>
+                        <td class="px-2 py-1 text-start">{{sale.sname}}</td>
+                        <td id="price" class="px-2 py-1 text-start">{{sale.sPrice}}</td>
+                        <td id="profit" class="px-2 py-1 text-start">{{sale.sProfit}}</td>
+                        <td id="profit" class="px-2 py-1 text-start">{{sale.sDisc}}</td>
+                        <td id="profit" class="px-2 py-1 text-start">{{sale.sQuant}}</td>
+                        <td id="profit" class="px-2 py-1 text-start">{{sale.sDebtor}}</td>
+                        <td id="profit" class="px-2 py-1 text-start">{{sale.sPhone}}</td>
+                         <td id="profit" class="px-2 py-1 text-start">{{sale.sDebtin}}</td>
+                        <td id="profit" class="px-2 py-1 text-start">{{sale.sDebt}}</td>
+                        <td class="px-2 py-1 text-start">{{sale.sCreator}}</td>
+                        <td class="px-2 py-1 text-start">
+                            
+                        <a href="/sales/return/{{sale.sid}}">
+                            <button  class="mdc-button mdc-button--raised p-1 icon-button filled-button--light mdc-ripple-upgraded view-data" type="button" data-id="" title="View Receipt">
+                                return
+                            </button>
+                            </a>
+                            {% if current_user.user=="500" %}
+                            <a href="/sales/del/{{sale.sid}}">
+                            <button onclick="confDel();" class="mdc-button mdc-button--raised p-1 icon-button filled-button--danger mdc-ripple-upgraded delete-data" type="button" data-id="" data-code="" title="Delete">
+                                <i class="material-icons mdc-button__icon">deleteoutline</i>
+                            </button>
+                            </a>
+                            {% endif %}
+                            <a href="/sales/debt/{{sale.sid}}">
+                            <button style="background-color:green">
+                               <i class="fa fa-money"></i>
+                            </button>
+                            </a>
+                            
+                        </td>
+                    </tr>
+                    {% endif %}
+                  
+                    {% endfor %}
+                    {% endif %}
+
                 </tbody>
             </table>
+            {% if current_user.user=="500" %}
             <label style="color:orange">Total price</label>
             <input type="text" name="total_price" value="{{price}}">
             <label style="color:brown">Total profit</label>
             <input type="text" name="total_profit" value="{{profit}}">
+            {% endif %}
         </div>
     </div>
 </div>

@@ -33,6 +33,7 @@
                         <i class="material-icons mdc-list-item__start-detail mdc-drawer-item-icon" aria-hidden="true">receipt</i> Sales
                     </a>
                 </div>
+                {% if current_user.user=="500" %}
                 <div class="mdc-list-item mdc-drawer-item">
                     <a class="mdc-drawer-link" href="{{url_for('summaryInfo')}}">
                         <i class="fa fa-list"></i> 
@@ -45,6 +46,7 @@
                        <p style="margin-left:15px">reports</p>
                     </a>
                 </div>
+                {% endif %}
             </nav>
         </div>
     </div>
