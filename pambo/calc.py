@@ -31,4 +31,15 @@ def sumDebt(credits):
     for credit in credits:
         paid.append(credit.amount)
     return sum(paid)
+def lettNum(letters):
+    num=[str(ord(letter)) for letter  in letters]
+    return splitNum(num)
+def splitNum(strNum):
+    if len(strNum)>4:
+        strNum_="".join(strNum[0:4])
+    else:
+        strNum_="".join(strNum)
+    return strNum_
+
+
 

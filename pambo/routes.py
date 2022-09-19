@@ -6,7 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from datetime import datetime,date
 from pambo.grpProd import getCat,getProdCat,scanOut,getProds,prodOut,prodChange,salesFilter,prodFilter,retProd,graphSales,catList
-from pambo.calc import profSum,expSum,numProd,sumDebt
+from pambo.calc import profSum,expSum,numProd,sumDebt,lettNum
 from pambo.mtrans import stk_push
 import random
 import os
@@ -170,10 +170,13 @@ def posPage():
         cphone=request.form.get("cphone")
         debt=request.form.get("debt")
         scans=scanOut(serial)
+        print(scans)
         if len(scans)>0:
             try:
-                code=str(scans[0][0])+str(random.randrange(1,100))+str(cname)
+                code=int(str(random.randrange(1,100))+str(lettNum(cname)))
+                print(code)
                 scanned=sales(
+                sid=code,
                 serial=scans[0][0],scode=code,sname=scans[0][1],sImage=scans[0][2],
                 sDate=date.today(),sCost=scans[0][5],sPrice=int(scans[0][4])*int(qty)-int(disc),
                 sProfit=int(scans[0][4])*int(qty)-int(disc)-int(scans[0][5])*int(qty)-float(debt),sDisc=float(disc),sQuant=qty,
@@ -317,6 +320,7 @@ def clearDebt(id):
         paydate=datetime.strptime(request.form["paydate"],"%Y-%m-%d")
         d_sales.sDebt=d_sales.sDebt-paid
         d_sales.sPay=paydate
+        d_sales.sProfit=d_sales.sProfit+paid
         credit_=credit(
             did=d_sales.sid,
             dname=d_sales.sDebtor,
