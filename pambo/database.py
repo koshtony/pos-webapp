@@ -38,6 +38,7 @@ class sales(posData.Model): # sales info
     sDate=posData.Column(posData.DateTime,nullable=False,default=datetime.utcnow)
     sCost=posData.Column(posData.Float,nullable=False)
     sPrice=posData.Column(posData.Float,nullable=False)
+    sPriceind=posData.Column(posData.Float,nullable=False)
     sDisc=posData.Column(posData.Float,nullable=True)
     sQuant=posData.Column(posData.Float,nullable=True)
     sProfit=posData.Column(posData.Float,nullable=False)

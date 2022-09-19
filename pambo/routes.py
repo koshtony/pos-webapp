@@ -178,7 +178,7 @@ def posPage():
                 scanned=sales(
                 sid=code,
                 serial=scans[0][0],scode=code,sname=scans[0][1],sImage=scans[0][2],
-                sDate=date.today(),sCost=scans[0][5],sPrice=int(scans[0][4])*int(qty)-int(disc),
+                sDate=date.today(),sCost=scans[0][5],sPrice=int(scans[0][4])*int(qty)-int(disc),sPriceind=int(scans[0][4]),
                 sProfit=int(scans[0][4])*int(qty)-int(disc)-int(scans[0][5])*int(qty)-float(debt),sDisc=float(disc),sQuant=qty,
                 sDebtin=float(debt),sDebt=float(debt),sDebtor=cname,sPhone=cphone,sCreator=current_user.user
                 )
@@ -301,9 +301,10 @@ def retSales(id):
     if request.method=="POST":
         qty=int(request.form["quant"])
         dsc=int(request.form["discount"])
-        sales_.sQuant=sales_.sQuant-qty
-        sales_.sPrice=(sales_.sQuant)*(sales_.sPrice)
-        sales_.sProfit=((sales_.sQuant)*sales_.sPrice)-((sales_.sQuant)*sales_.sCost)-dsc
+        prevQty=sales_.sQuant
+        sales_.sQuant=prevQty-qty
+        sales_.sPrice=(prevQty-qty)*(sales_.sPriceind)
+        sales_.sProfit=((prevQty-qty)*sales_.sPriceind)-((prevQty-qty)*sales_.sCost)-dsc-sales.sDebt
         sales_.sDisc=dsc
         posData.session.commit()
         retProd(int(request.form["quant"]),sales_.sname)
