@@ -18,7 +18,9 @@ body {
 }
 
 #POS-field {
-    height: 55vh
+    height: 60vh;
+    overflow-y: scroll;
+
 }
 
 .mdc-card.info-card.info-card--primary .card-inner .card-icon-wrapper {

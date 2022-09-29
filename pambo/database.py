@@ -17,7 +17,6 @@ class category(posData.Model): # products category table
     catCreator=posData.Column(posData.String(100),nullable=False)
 class products(posData.Model): # actual products info
     pid=posData.Column(posData.Integer,primary_key=True)
-    serial=posData.Column(posData.String(),nullable=False,default="0")
     pname=posData.Column(posData.String(100),nullable=False)
     pDesc=posData.Column(posData.String(100),nullable=True)
     pCat=posData.Column(posData.String(100),nullable=False)
@@ -29,6 +28,20 @@ class products(posData.Model): # actual products info
     pDate=posData.Column(posData.DateTime,nullable=False,default=datetime.utcnow)
     pShop=posData.Column(posData.String(100),nullable=False)
     pCreator=posData.Column(posData.String(100),nullable=False)
+class serialise(posData.Model):
+    spid=posData.Column(posData.Integer,primary_key=True)
+    serial=posData.Column(posData.String(100),nullable=False)
+    spname=posData.Column(posData.String(100),nullable=False)
+    spDesc=posData.Column(posData.String(100),nullable=True)
+    spCat=posData.Column(posData.String(100),nullable=False)
+    spImage=posData.Column(posData.String(100),nullable=True)
+    spQuant=posData.Column(posData.Float,nullable=False)
+    spCost=posData.Column(posData.Float,nullable=False)
+    spPrice=posData.Column(posData.Float,nullable=False)
+    spStatus=posData.Column(posData.String(100),nullable=False)
+    spDate=posData.Column(posData.DateTime,nullable=False,default=datetime.utcnow)
+    spShop=posData.Column(posData.String(100),nullable=False)
+    spCreator=posData.Column(posData.String(100),nullable=False)
 class sales(posData.Model): # sales info
     sid=posData.Column(posData.Integer,primary_key=True)
     serial=posData.Column(posData.String(100),nullable=False)

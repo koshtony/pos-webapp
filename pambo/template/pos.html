@@ -7,7 +7,7 @@
     </div>
 </div>
 <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
-    <div class="mdc-card" style="background-color: aquamarine";>
+    <div class="mdc-card" style="background-color: white";>
         {% with messages =get_flashed_messages() %}
                                         {% for message in messages %}
                                         <p style="color:red">{{message}}</p>
@@ -89,9 +89,9 @@
                                 <dt class="h4 fw-bold text-light">customer Info</dt>
                                 <dd class="text-end py-1 px-2 rounded-0 bg-light">
 
-                                    <input type="text" name="cname" id="cname" placeholder="customer name" required>
+                                    <input type="text" name="cname" id="cname" placeholder="customer name" >
                                     <input type="text" name="cphone" id="cphone" placeholder="customer phone">
-                                    <input type="text" name="debt" id="debt" placeholder="register debt amount" required>
+                                    <input type="text" name="debt" id="debt" placeholder="register debt amount" >
                                     
                                 </dd>
                                 <dt class="h4 fw-bold text-light">Discount</dt>

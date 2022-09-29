@@ -134,7 +134,7 @@ def addProd():
             shop=request.form["shop"]
             status=request.form["status"]
             prodInfo=products(
-                serial=serial, pname=pname,pDesc=pdesc,
+                pname=pname,pDesc=pdesc,
                 pCat=pcat,pImage=imFile.filename,pQuant=pq,pCost=pcost,pPrice=pp,pStatus=status,
                 pDate=date.today(),pShop=shop,pCreator=""
             )
@@ -154,7 +154,8 @@ def addProd():
                 posData.session.commit()
             return redirect(url_for('addProd'))
     return render_template('add_product.html',cat=cat,prodDicts=prodDicts)
-
+def addSerial():
+    pass
 @app.route('/imdownload/<path:filename>')
 @login_required
 def prodImg(filename):
@@ -193,7 +194,7 @@ def posPage():
     for prods in prods:
         scan={
            "pid":prods.pid,
-           "serial":prods.serial,
+        
         "quant":prods.pQuant,
         "name":prods.pname,
         "price":prods.pPrice
