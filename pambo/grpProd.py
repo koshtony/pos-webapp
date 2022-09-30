@@ -80,6 +80,12 @@ def graphSales():
     return salesDict
 def catList(strings):
     return strings.split(",")
+def addByName(name,qty):
+    conn=sqlite3.connect("./pambo/pos.db")
+    conn.execute('update products set pQuant=pQuant+? where pname=?',(qty,name,))
+    conn.commit()
+
+
 
 
 

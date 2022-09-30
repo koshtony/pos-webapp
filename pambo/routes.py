@@ -115,13 +115,15 @@ def prodInfo():
     prods=products.query.all()
     prodGrp=getProdCat()
     return render_template('products.html',prods=prods,prodGrp=prodGrp)
-
+# add products info
 @app.route('/add_products',methods=['GET','POST'])
 @login_required
+
 def addProd():
-    cat=category.query.all()
-    prodDicts=dictionary.query.all()
+    cat=category.query.all() # get category data
+    prodDicts=dictionary.query.all() # dictionary data; set unique products name
     if request.method=="POST":
+        # get form data
         try:
             serial=request.form["serial"]
             pname=request.form["pname"]
@@ -133,12 +135,12 @@ def addProd():
             pp=request.form["pp"]
             shop=request.form["shop"]
             status=request.form["status"]
+            
             prodInfo=products(
-                pname=pname,pDesc=pdesc,
-                pCat=pcat,pImage=imFile.filename,pQuant=pq,pCost=pcost,pPrice=pp,pStatus=status,
-                pDate=date.today(),pShop=shop,pCreator=""
+                    pname=pname,pDesc=pdesc,
+                    pCat=pcat,pImage=imFile.filename,pQuant=pq,pCost=pcost,pPrice=pp,pStatus=status,
+                    pDate=date.today(),pShop=shop,pCreator=current_user.user
             )
-            print(imFile)
             if imFile.filename!="":
                 imFile.save(os.path.join("./pambo/images/",secure_filename(imFile.filename)))
             posData.session.add(prodInfo)
@@ -153,9 +155,7 @@ def addProd():
                 posData.session.add(dictInfo)
                 posData.session.commit()
             return redirect(url_for('addProd'))
-    return render_template('add_product.html',cat=cat,prodDicts=prodDicts)
-def addSerial():
-    pass
+    return render_template('add_product.html',cat=cat,prodDicts=prodDicts)  
 @app.route('/imdownload/<path:filename>')
 @login_required
 def prodImg(filename):

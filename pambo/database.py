@@ -5,6 +5,7 @@ class posUsers(posData.Model,UserMixin): #users auth table
     id=posData.Column(posData.Integer,primary_key=True)
     user=posData.Column(posData.String(100),nullable=False)
     password=posData.Column(posData.String(100),nullable=False)
+    role=posData.Column(posData.String(100),nullable=False)
     image=posData.Column(posData.String(100),nullable=True)
     def __repr__(self):
         return str(self.id)
@@ -17,7 +18,8 @@ class category(posData.Model): # products category table
     catCreator=posData.Column(posData.String(100),nullable=False)
 class products(posData.Model): # actual products info
     pid=posData.Column(posData.Integer,primary_key=True)
-    pname=posData.Column(posData.String(100),nullable=False)
+    serial=posData.Column(posData.String(100),nullable=True)
+    pname=posData.Column(posData.String(100),nullable=True)
     pDesc=posData.Column(posData.String(100),nullable=True)
     pCat=posData.Column(posData.String(100),nullable=False)
     pImage=posData.Column(posData.String(100),nullable=True)
@@ -28,20 +30,6 @@ class products(posData.Model): # actual products info
     pDate=posData.Column(posData.DateTime,nullable=False,default=datetime.utcnow)
     pShop=posData.Column(posData.String(100),nullable=False)
     pCreator=posData.Column(posData.String(100),nullable=False)
-class serialise(posData.Model):
-    spid=posData.Column(posData.Integer,primary_key=True)
-    serial=posData.Column(posData.String(100),nullable=False)
-    spname=posData.Column(posData.String(100),nullable=False)
-    spDesc=posData.Column(posData.String(100),nullable=True)
-    spCat=posData.Column(posData.String(100),nullable=False)
-    spImage=posData.Column(posData.String(100),nullable=True)
-    spQuant=posData.Column(posData.Float,nullable=False)
-    spCost=posData.Column(posData.Float,nullable=False)
-    spPrice=posData.Column(posData.Float,nullable=False)
-    spStatus=posData.Column(posData.String(100),nullable=False)
-    spDate=posData.Column(posData.DateTime,nullable=False,default=datetime.utcnow)
-    spShop=posData.Column(posData.String(100),nullable=False)
-    spCreator=posData.Column(posData.String(100),nullable=False)
 class sales(posData.Model): # sales info
     sid=posData.Column(posData.Integer,primary_key=True)
     serial=posData.Column(posData.String(100),nullable=False)
@@ -67,15 +55,18 @@ class customer(posData.Model): # customer info
     cUphone=posData.Column(posData.String(100),nullable=False)
     cUloc=posData.Column(posData.String(100),nullable=False)
     cUtic=posData.Column(posData.String(100),nullable=True)
-class dictionary(posData.Model):
+class dictionary(posData.Model): #initial model info
     did=posData.Column(posData.Integer,primary_key=True)
     dname=posData.Column(posData.String(100),nullable=False)
-class expenses(posData.Model):
+    dprice=posData.Column(posData.Float,nullable=True)
+    dcost=posData.Column(posData.Float,nullable=True)
+    ddesc=posData.Column(posData.String(100),nullable=True)
+class expenses(posData.Model): # expendicture info
     eid=posData.Column(posData.Integer,primary_key=True)
     amnt=posData.Column(posData.Float,nullable=True)
     edesc=posData.Column(posData.String(100),nullable=True)
     edate=posData.Column(posData.DateTime,nullable=True)
-class credit(posData.Model):
+class credit(posData.Model): # debt info
     id=posData.Column(posData.Integer,primary_key=True)
     did=posData.Column(posData.Integer,nullable=False)
     dname=posData.Column(posData.String(100),nullable=True)
