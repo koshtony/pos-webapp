@@ -26,14 +26,26 @@ def scanOut(name):
     items=[]
     conn=sqlite3.connect('./pambo/pos.db')
     con=conn.cursor()
-    sales=con.execute('select serial,pname,pImage,pQuant,pPrice,pCost,pPrice-pCost as total_profit from products where pname=?',(name,))
+    sales=con.execute('select serial,pname,pImage,pQuant,pPrice,pCost,pPrice-pCost as total_profit from products where pname=? or serial=? limit 1',(name,name,))
     for sale in sales:
         items.append(sale)
     con.close()
     return items
-def prodOut(serial):
+def firstRow(name):
     conn=sqlite3.connect('./pambo/pos.db')
-    conn.execute('delete from products where serial=?',(serial,))
+    con=conn.cursor()
+    rows=con.execute('select pid from products where pname=? or serial=?',(name,name,))
+    pids=[]
+    for row in rows:
+        pids.append(row)
+    if len(pids)>0:
+        return pids[0][0]
+    else:
+        return ""
+def prodOut(serial):
+    pid=firstRow(serial)
+    conn=sqlite3.connect('./pambo/pos.db')
+    conn.execute('delete from products where (serial=? or pname=?) and pid=?',(serial,serial,pid,))
     conn.commit()
 def prodChange(qty,name):
     conn=sqlite3.connect('./pambo/pos.db')
@@ -80,14 +92,6 @@ def graphSales():
     return salesDict
 def catList(strings):
     return strings.split(",")
-def addByName(name,qty):
-    conn=sqlite3.connect("./pambo/pos.db")
-    conn.execute('update products set pQuant=pQuant+? where pname=?',(qty,name,))
-    conn.commit()
-
-
-
-
 
 
 

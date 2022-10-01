@@ -29,10 +29,7 @@
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-5 col-md-12">
-                        <div class="form-group mb-3">
-                            <label for="product-qty">Qty</label>
-                            <input type="number" class="form-control form-control-sm text-center" step="any" name="qty" id="qty" value="1">
-                        </div>
+                        
                     </div>
                     <div class="col-lg-4 col-md-2 col-md-12">
                         <div class="form-group mb-3">
@@ -59,7 +56,7 @@
                 <div class="d-flex w-100" id="POS-field">
                     <div class="col-8 bg-gradient bg-light border h-100">
                         <div class="table-responsive">
-                        <table class="table table-bordered">
+                        <table class="table table-bordered" style="overflow-y: scroll;">
                             <colgroup>
                                 <col width="5%">
                                 <col width="15%">
@@ -76,7 +73,7 @@
                                     <th class="py-1 px-2 text-center  text-light">Total</th>
                                 </tr>
                             </thead>
-                            <tbody id="tbc">
+                            <tbody id="tbc" style="background-color:yellowgreen; color:aqua">
                             
 
                             </tbody>
@@ -89,9 +86,9 @@
                                 <dt class="h4 fw-bold text-light">customer Info</dt>
                                 <dd class="text-end py-1 px-2 rounded-0 bg-light">
 
-                                    <input type="text" name="cname" id="cname" placeholder="customer name" >
+                                    <input type="text" name="cname" id="cname" placeholder="customer name" required>
                                     <input type="text" name="cphone" id="cphone" placeholder="customer phone">
-                                    <input type="text" name="debt" id="debt" placeholder="register debt amount" >
+                                    <input type="text" name="debt" id="debt" placeholder="register debt amount" required>
                                     
                                 </dd>
                                 <dt class="h4 fw-bold text-light">Discount</dt>
@@ -127,12 +124,12 @@
         var newScans=[]
         var err=[]
         var ser=$('#serial').val()
-        var quant=$('#qty').val()
+        var quant=1
         var disc=$('#disc').val()
         var debt=$('#debt').val()
         //$('#serial').val("")
         scans.forEach(function(scan){
-            if(scan.name==ser){
+            if(scan.name==ser || scan.serial==ser){
             newScans.push(scan.pid,quant,scan.name,scan.price,scan.price*quant)
             }
             

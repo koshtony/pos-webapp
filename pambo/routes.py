@@ -115,15 +115,13 @@ def prodInfo():
     prods=products.query.all()
     prodGrp=getProdCat()
     return render_template('products.html',prods=prods,prodGrp=prodGrp)
-# add products info
+
 @app.route('/add_products',methods=['GET','POST'])
 @login_required
-
 def addProd():
-    cat=category.query.all() # get category data
-    prodDicts=dictionary.query.all() # dictionary data; set unique products name
+    cat=category.query.all()
+    prodDicts=dictionary.query.all()
     if request.method=="POST":
-        # get form data
         try:
             serial=request.form["serial"]
             pname=request.form["pname"]
@@ -135,12 +133,12 @@ def addProd():
             pp=request.form["pp"]
             shop=request.form["shop"]
             status=request.form["status"]
-            
             prodInfo=products(
-                    pname=pname,pDesc=pdesc,
-                    pCat=pcat,pImage=imFile.filename,pQuant=pq,pCost=pcost,pPrice=pp,pStatus=status,
-                    pDate=date.today(),pShop=shop,pCreator=current_user.user
+                serial=serial, pname=pname,pDesc=pdesc,
+                pCat=pcat,pImage=imFile.filename,pQuant=pq,pCost=pcost,pPrice=pp,pStatus=status,
+                pDate=date.today(),pShop=shop,pCreator=""
             )
+            print(imFile)
             if imFile.filename!="":
                 imFile.save(os.path.join("./pambo/images/",secure_filename(imFile.filename)))
             posData.session.add(prodInfo)
@@ -155,7 +153,8 @@ def addProd():
                 posData.session.add(dictInfo)
                 posData.session.commit()
             return redirect(url_for('addProd'))
-    return render_template('add_product.html',cat=cat,prodDicts=prodDicts)  
+    return render_template('add_product.html',cat=cat,prodDicts=prodDicts)
+
 @app.route('/imdownload/<path:filename>')
 @login_required
 def prodImg(filename):
@@ -165,7 +164,7 @@ def prodImg(filename):
 def posPage():
     if request.method=="POST":
         serial=request.form.get("serial")
-        qty=request.form.get("qty")
+        qty=1
         disc=request.form.get("disc")
         cname=request.form.get("cname")
         cphone=request.form.get("cphone")
@@ -185,7 +184,7 @@ def posPage():
                 )
                 posData.session.add(scanned)
                 posData.session.commit()
-                prodChange(qty,serial)
+                prodOut(serial)
             except:
                 flash("input error")
                 
@@ -194,7 +193,7 @@ def posPage():
     for prods in prods:
         scan={
            "pid":prods.pid,
-        
+           "serial":prods.serial,
         "quant":prods.pQuant,
         "name":prods.pname,
         "price":prods.pPrice
@@ -273,7 +272,6 @@ def editProd(id):
     prodByid=products.query.get_or_404(id)
     prodDicts=dictionary.query.all()
     if request.method=="POST":
-        prodByid.pQuant=request.form["pq"]
         prodByid.pname=request.form["pname"]
         prodByid.pDesc=request.form["pdesc"]
         prodByid.pPrice=request.form["pp"]
