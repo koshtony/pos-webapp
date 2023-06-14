@@ -1,2 +1,2 @@
 # pos-webapp
-point on sales
+point of sales
